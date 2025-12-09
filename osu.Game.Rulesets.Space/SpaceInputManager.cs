@@ -15,10 +15,5 @@ namespace osu.Game.Rulesets.Space
 
     public enum SpaceAction
     {
-        [Description("Button 1")]
-        Button1,
-
-        [Description("Button 2")]
-        Button2,
     }
 }

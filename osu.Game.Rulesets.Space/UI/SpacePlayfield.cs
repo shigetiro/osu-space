@@ -1,19 +1,25 @@
-﻿
-using osu.Framework.Allocation;
+﻿using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Containers;
 using osu.Game.Rulesets.UI;
 using osuTK.Graphics;
+using osu.Game.Rulesets.Space.UI.Cursor;
 
 namespace osu.Game.Rulesets.Space.UI
 {
     [Cached]
     public partial class SpacePlayfield : Playfield
     {
-        public SpacePlayfield()
+        protected override GameplayCursorContainer CreateCursor() => new SpaceCursorContainer
         {
-            InternalChildren =
+            RelativeSizeAxes = Axes.Both
+        };
+
+        [BackgroundDependencyLoader]
+        private void load()
+        {
+            AddRangeInternal(
             [
                 new Container
                 {
@@ -29,7 +35,7 @@ namespace osu.Game.Rulesets.Space.UI
                     }
                 },
                 HitObjectContainer,
-            ];
+            ]);
         }
     }
 }

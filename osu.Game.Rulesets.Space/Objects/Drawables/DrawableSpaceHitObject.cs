@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -7,6 +8,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Game.Audio;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
+using osu.Game.Rulesets.Space.Mods;
 using osu.Game.Rulesets.Space.UI;
 using osuTK;
 using osuTK.Graphics;
@@ -108,18 +110,16 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
 
         protected override void CheckForResult(bool userTriggered, double timeOffset)
         {
-            if (timeOffset >= 0)
+            if (ruleset.Mods.Any(m => m is SpaceModAutoplay) && timeOffset >= 0)
             {
-                // testing only
                 ApplyMaxResult();
                 return;
-
             }
             if (Judged) return;
 
             bool isHit = false;
 
-            var cursor = ruleset.Cursor?.ActiveCursor;
+            var cursor = ruleset.Playfield.Cursor?.ActiveCursor;
             if (cursor != null)
             {
                 if (ScreenSpaceDrawQuad.Contains(cursor.ScreenSpaceDrawQuad.Centre))

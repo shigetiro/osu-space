@@ -14,6 +14,7 @@ using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.UI;
 using osuTK;
 using osuTK.Graphics;
+using osu.Game.Rulesets.Scoring;
 
 namespace osu.Game.Rulesets.Space
 {
@@ -30,6 +31,14 @@ namespace osu.Game.Rulesets.Space
         public override DifficultyCalculator CreateDifficultyCalculator(IWorkingBeatmap beatmap) =>
             new SpaceDifficultyCalculator(RulesetInfo, beatmap);
 
+        protected override IEnumerable<HitResult> GetValidHitResults()
+        {
+            return
+            [
+                HitResult.Great,
+            ];
+        }
+
         public override IEnumerable<Mod> GetModsFor(ModType type)
         {
             switch (type)
@@ -44,11 +53,7 @@ namespace osu.Game.Rulesets.Space
 
         public override string ShortName => "osuspaceruleset";
 
-        public override IEnumerable<KeyBinding> GetDefaultKeyBindings(int variant = 0) => new[]
-        {
-            new KeyBinding(InputKey.Z, SpaceAction.Button1),
-            new KeyBinding(InputKey.X, SpaceAction.Button2),
-        };
+        public override IEnumerable<KeyBinding> GetDefaultKeyBindings(int variant = 0) => [];
 
         public override Drawable CreateIcon() => new Icon(ShortName[0]);
 
