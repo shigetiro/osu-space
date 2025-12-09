@@ -24,7 +24,7 @@ namespace osu.Game.Rulesets.Space.Configuration
             SetDefault(SpaceRulesetSetting.SnakingInSliders, true);
             SetDefault(SpaceRulesetSetting.SnakingOutSliders, true);
             SetDefault(SpaceRulesetSetting.ShowCursorTrail, true);
-            SetDefault(SpaceRulesetSetting.PlayfieldBorderStyle, PlayfieldBorderStyle.None);
+            SetDefault(SpaceRulesetSetting.PlayfieldBorderStyle, PlayfieldBorderStyle.Full);
             SetDefault(SpaceRulesetSetting.noteOpacity, 1f, 0f, 1f, 0.01f);
             SetDefault(SpaceRulesetSetting.noteScale, 1.0f, 0.5f, 4.0f, 0.05f);
             SetDefault(SpaceRulesetSetting.approachRate, 40f, 1f, 200f, 1f);
