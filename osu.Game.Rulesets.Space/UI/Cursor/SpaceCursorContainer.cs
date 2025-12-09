@@ -64,16 +64,6 @@ namespace osu.Game.Rulesets.Space.UI.Cursor
             }, true);
         }
 
-        private int downCount;
-
-        private void updateExpandedState()
-        {
-            if (downCount > 0)
-                ActiveCursor.Expand();
-            else
-                ActiveCursor.Contract();
-        }
-
         protected override void Update()
         {
             base.Update();
@@ -87,10 +77,13 @@ namespace osu.Game.Rulesets.Space.UI.Cursor
 
         protected override bool OnMouseMove(MouseMoveEvent e)
         {
-            bool result = base.OnMouseMove(e);
-            ActiveCursor.Position = Vector2.Clamp(ActiveCursor.Position, Vector2.Zero, DrawSize);
-            return result;
+            base.OnMouseMove(e);
+            if (ActiveCursor != null)
+                ActiveCursor.Position = Vector2.Clamp(ActiveCursor.Position, Vector2.Zero, DrawSize);
+            return true;
         }
+
+        public override bool ReceivePositionalInputAt(Vector2 screenSpacePos) => true;
 
         public bool OnPressed(KeyBindingPressEvent<SpaceAction> e)
         {
