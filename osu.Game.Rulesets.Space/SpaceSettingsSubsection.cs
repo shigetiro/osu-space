@@ -3,6 +3,10 @@
 
 using osu.Framework.Allocation;
 using osu.Framework.Platform;
+using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
+using osuTK;
+using osu.Framework.Bindables;
 using osu.Framework.Localisation;
 using osu.Game.Overlays.Settings;
 using osu.Game.Rulesets.Space.Configuration;
@@ -54,9 +58,11 @@ namespace osu.Game.Rulesets.Space
                 },
                 new SettingsEnumDropdown<SpacePalette>
                 {
-                    LabelText = "Color Palette",
+                    LabelText = "Note Color Palette",
                     Current = config.GetBindable<SpacePalette>(SpaceRulesetSetting.Palette),
                 },
+                new PalettePreview(config),
+
                 new SettingsSlider<float>
                 {
                     LabelText = "Note Thickness",
@@ -125,9 +131,47 @@ namespace osu.Game.Rulesets.Space
             };
         }
 
-        // private partial class SpaceScrollSlider : RoundedSliderBar<double>
-        // {
-        //     public override LocalisableString TooltipText => RulesetSettingsStrings.ScrollSpeedTooltip((int)DrawableSpaceRuleset.ComputeScrollTime(Current.Value), Current.Value);
-        // }
+        private partial class PalettePreview : CompositeDrawable
+        {
+            private readonly Bindable<SpacePalette> palette = new Bindable<SpacePalette>();
+            private readonly FillFlowContainer flow;
+
+            public PalettePreview(SpaceRulesetConfigManager config)
+            {
+                RelativeSizeAxes = Axes.X;
+                AutoSizeAxes = Axes.Y;
+                Padding = new MarginPadding { Horizontal = 20, Vertical = 0 };
+
+                InternalChild = flow = new FillFlowContainer
+                {
+                    RelativeSizeAxes = Axes.X,
+                    AutoSizeAxes = Axes.Y,
+                    Spacing = new Vector2(2),
+                    Direction = FillDirection.Full,
+                };
+
+                config.BindWith(SpaceRulesetSetting.Palette, palette);
+            }
+
+            protected override void LoadComplete()
+            {
+                base.LoadComplete();
+                palette.BindValueChanged(p => updateColors(p.NewValue), true);
+            }
+
+            private void updateColors(SpacePalette p)
+            {
+                flow.Clear();
+                var colors = SpacePaletteHelper.GetColors(p);
+                foreach (var color in colors)
+                {
+                    flow.Add(new Box
+                    {
+                        Size = new Vector2(35),
+                        Colour = color,
+                    });
+                }
+            }
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace osu.Game.Rulesets.Space.Configuration
                 case SpacePalette.White: return new[] { Colour4.FromHex("#FFFFFF") };
                 case SpacePalette.Purple: return new[] { Colour4.FromHex("#9A5EF9") };
                 case SpacePalette.Vortex: return new[] { Colour4.FromHex("#000000"), Colour4.FromHex("#381E42") };
-                case SpacePalette.CottonCandy: return new[] { Colour4.FromHex("#00FFED"), Colour4.FromHex("#00FFED") };
+                case SpacePalette.CottonCandy: return new[] { Colour4.FromHex("#00FFED"), Colour4.FromHex("#ff8ff9") };
                 case SpacePalette.VeggieStraws: return new[] { Colour4.FromHex("#FFCC4D"), Colour4.FromHex("#FF7892"), Colour4.FromHex("#FF7892") };
                 case SpacePalette.EverybodyVotesChannel: return new[] { Colour4.FromHex("#FC94F2"), Colour4.FromHex("#96FC94") };
                 case SpacePalette.RedAndBlue: return new[] { Colour4.FromHex("#FC4441"), Colour4.FromHex("#4151FC") };
