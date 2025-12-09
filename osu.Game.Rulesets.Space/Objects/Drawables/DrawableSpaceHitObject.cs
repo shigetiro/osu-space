@@ -153,11 +153,6 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
 
         protected override void CheckForResult(bool userTriggered, double timeOffset)
         {
-            if (ruleset.Mods.Any(m => m is SpaceModAutoplay) && timeOffset >= 0)
-            {
-                ApplyMaxResult();
-                return;
-            }
             if (Judged) return;
 
             bool isHit = false;

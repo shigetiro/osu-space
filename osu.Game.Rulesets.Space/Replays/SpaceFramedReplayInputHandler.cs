@@ -1,6 +1,4 @@
-﻿
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using osu.Framework.Input.StateChanges;
 using osu.Framework.Utils;
 using osu.Game.Replays;
@@ -15,7 +13,7 @@ namespace osu.Game.Rulesets.Space.Replays
         {
         }
 
-        protected override bool IsImportant(SpaceReplayFrame frame) => frame.Actions.Any();
+        protected override bool IsImportant(SpaceReplayFrame frame) => true;
 
         protected override void CollectReplayInputs(List<IInput> inputs)
         {
@@ -24,10 +22,6 @@ namespace osu.Game.Rulesets.Space.Replays
             inputs.Add(new MousePositionAbsoluteInput
             {
                 Position = GamefieldToScreenSpace(position),
-            });
-            inputs.Add(new ReplayState<SpaceAction>
-            {
-                PressedActions = CurrentFrame?.Actions ?? new List<SpaceAction>(),
             });
         }
     }

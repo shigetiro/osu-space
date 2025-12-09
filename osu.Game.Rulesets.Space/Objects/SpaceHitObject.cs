@@ -14,7 +14,15 @@ namespace osu.Game.Rulesets.Space.Objects
         public float Y { get; set; }
         public override Judgement CreateJudgement() => new Judgement();
 
-        public Vector2 Position { get; set; }
+        public Vector2 Position
+        {
+            get => new Vector2(X, Y);
+            set
+            {
+                X = value.X;
+                Y = value.Y;
+            }
+        }
 
         public double TimePreempt = 600;
 

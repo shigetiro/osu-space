@@ -1,5 +1,4 @@
-﻿
-using osu.Game.Beatmaps;
+﻿using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Space.Objects;
 using osu.Game.Rulesets.Replays;
 
@@ -24,7 +23,6 @@ namespace osu.Game.Rulesets.Space.Replays
                 {
                     Time = hitObject.StartTime,
                     Position = hitObject.Position,
-                    // todo: add required inputs and extra frames.
                 });
             }
         }

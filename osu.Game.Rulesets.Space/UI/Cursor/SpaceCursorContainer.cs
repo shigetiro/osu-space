@@ -80,10 +80,8 @@ namespace osu.Game.Rulesets.Space.UI.Cursor
             base.OnMouseMove(e);
             if (ActiveCursor != null)
                 ActiveCursor.Position = Vector2.Clamp(ActiveCursor.Position, Vector2.Zero, DrawSize);
-            return true;
+            return false;
         }
-
-        public override bool ReceivePositionalInputAt(Vector2 screenSpacePos) => true;
 
         public bool OnPressed(KeyBindingPressEvent<SpaceAction> e)
         {
