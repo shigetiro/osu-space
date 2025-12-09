@@ -23,7 +23,7 @@ namespace osu.Game.Rulesets.Space
 {
     public partial class SpaceRuleset : Ruleset
     {
-        public override string Description => "SoundSpacePlus ported to osu!";
+        public override string Description => "osu!space";
 
         public override DrawableRuleset CreateDrawableRulesetWith(IBeatmap beatmap, IReadOnlyList<Mod> mods = null) =>
             new DrawableSpaceRuleset(this, beatmap, mods);
@@ -60,19 +60,38 @@ namespace osu.Game.Rulesets.Space
         {
             public Icon(char c)
             {
+                Size = new Vector2(20);
                 InternalChildren = new Drawable[]
                 {
-                    new Circle
+                    new CircularContainer
                     {
-                        Size = new Vector2(20),
-                        Colour = Color4.White,
+                        RelativeSizeAxes = Axes.Both,
+                        Masking = true,
+                        BorderThickness = 2.5f,
+                        BorderColour = Color4.White,
+                        Child = new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Alpha = 0,
+                            AlwaysPresent = true,
+                        }
                     },
-                    new SpriteText
+                    new Container
                     {
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        Text = c.ToString(),
-                        Font = OsuFont.Default.With(size: 18)
+                        Size = new Vector2(11),
+                        Rotation = -25,
+                        Masking = true,
+                        CornerRadius = 3,
+                        BorderThickness = 2.5f,
+                        BorderColour = Color4.White,
+                        Child = new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Alpha = 0,
+                            AlwaysPresent = true,
+                        }
                     }
                 };
             }
