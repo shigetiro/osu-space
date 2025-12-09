@@ -25,6 +25,8 @@ namespace osu.Game.Rulesets.Space
         {
         }
 
+        private SettingsEnumDropdown<SpacePalette> paletteSelector;
+
         [BackgroundDependencyLoader]
         private void load(GameHost host)
         {
@@ -56,7 +58,7 @@ namespace osu.Game.Rulesets.Space
                     LabelText = RulesetSettingsStrings.PlayfieldBorderStyle,
                     Current = config.GetBindable<PlayfieldBorderStyle>(SpaceRulesetSetting.PlayfieldBorderStyle),
                 },
-                new SettingsEnumDropdown<SpacePalette>
+                paletteSelector = new SettingsEnumDropdown<SpacePalette>
                 {
                     LabelText = "Note Color Palette",
                     Current = config.GetBindable<SpacePalette>(SpaceRulesetSetting.Palette),
@@ -129,6 +131,8 @@ namespace osu.Game.Rulesets.Space
                     Current = config.GetBindable<bool>(SpaceRulesetSetting.halfGhost)
                 }
             };
+
+            paletteSelector.SetNoticeText("Some colors extracted from Sound Space Plus (Rhythia)");
         }
 
         private partial class PalettePreview : CompositeDrawable
