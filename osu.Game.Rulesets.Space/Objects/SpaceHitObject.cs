@@ -9,6 +9,7 @@ namespace osu.Game.Rulesets.Space.Objects
 {
     public class SpaceHitObject : HitObject
     {
+        public int Index { get; set; }
         public float X { get; set; }
         public float Y { get; set; }
         public override Judgement CreateJudgement() => new Judgement();

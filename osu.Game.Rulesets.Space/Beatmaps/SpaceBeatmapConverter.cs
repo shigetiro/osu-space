@@ -13,6 +13,8 @@ namespace osu.Game.Rulesets.Space.Beatmaps
 {
     public class SpaceBeatmapConverter : BeatmapConverter<SpaceHitObject>
     {
+        private int index = 0;
+
         public SpaceBeatmapConverter(IBeatmap beatmap, Ruleset ruleset)
             : base(beatmap, ruleset)
         {
@@ -32,6 +34,7 @@ namespace osu.Game.Rulesets.Space.Beatmaps
 
             yield return new SpaceHitObject
             {
+                Index = index++,
                 Samples = original.Samples,
                 StartTime = original.StartTime,
                 X = (col + 0.5f) * (SpacePlayfield.BASE_SIZE.X / 3f),

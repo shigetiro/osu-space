@@ -3,7 +3,9 @@
 
 #nullable enable
 
+using osu.Framework.Configuration.Tracking;
 using osu.Game.Configuration;
+using osu.Game.Localisation;
 using osu.Game.Rulesets.Configuration;
 using osu.Game.Rulesets.UI;
 
@@ -23,7 +25,15 @@ namespace osu.Game.Rulesets.Space.Configuration
             SetDefault(SpaceRulesetSetting.SnakingOutSliders, true);
             SetDefault(SpaceRulesetSetting.ShowCursorTrail, true);
             SetDefault(SpaceRulesetSetting.PlayfieldBorderStyle, PlayfieldBorderStyle.None);
+            SetDefault(SpaceRulesetSetting.noteOpacity, 1f, 0f, 1f, 0.01f);
+            SetDefault(SpaceRulesetSetting.noteScale, 1.0f, 0.5f, 4.0f, 0.05f);
+            SetDefault(SpaceRulesetSetting.approachRate, 40f, 1f, 200f, 1f);
+            SetDefault(SpaceRulesetSetting.spawnDistance, 40f, 1f, 400f, 1f);
+            SetDefault(SpaceRulesetSetting.fadeLength, 0.5f, 0f, 1f, 0.01f);
+            SetDefault(SpaceRulesetSetting.doNotPushBack, true);
+            SetDefault(SpaceRulesetSetting.halfGhost, false);
         }
+
     }
 
     public enum SpaceRulesetSetting
@@ -32,5 +42,12 @@ namespace osu.Game.Rulesets.Space.Configuration
         SnakingOutSliders,
         ShowCursorTrail,
         PlayfieldBorderStyle,
+        noteOpacity,
+        noteScale,
+        approachRate,
+        spawnDistance,
+        fadeLength,
+        doNotPushBack,
+        halfGhost
     }
 }

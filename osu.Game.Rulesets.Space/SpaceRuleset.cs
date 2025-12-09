@@ -1,4 +1,4 @@
-﻿
+﻿#nullable enable
 using System;
 using System.Collections.Generic;
 using osu.Framework.Graphics;
@@ -15,14 +15,19 @@ using osu.Game.Rulesets.UI;
 using osuTK;
 using osuTK.Graphics;
 using osu.Game.Rulesets.Scoring;
+using osu.Game.Rulesets.Configuration;
+using osu.Game.Configuration;
+using osu.Game.Rulesets.Space.Configuration;
+using osu.Game.Overlays.Settings;
 
 namespace osu.Game.Rulesets.Space
 {
     public partial class SpaceRuleset : Ruleset
     {
         public override string Description => "osu!space";
+        public override string ShortName => "osuspaceruleset";
 
-        public override DrawableRuleset CreateDrawableRulesetWith(IBeatmap beatmap, IReadOnlyList<Mod> mods = null) =>
+        public override DrawableRuleset CreateDrawableRulesetWith(IBeatmap beatmap, IReadOnlyList<Mod>? mods = null) =>
             new DrawableSpaceRuleset(this, beatmap, mods);
 
         public override IBeatmapConverter CreateBeatmapConverter(IBeatmap beatmap) =>
@@ -30,6 +35,10 @@ namespace osu.Game.Rulesets.Space
 
         public override DifficultyCalculator CreateDifficultyCalculator(IWorkingBeatmap beatmap) =>
             new SpaceDifficultyCalculator(RulesetInfo, beatmap);
+
+        public override IRulesetConfigManager CreateConfig(SettingsStore? settings) => new SpaceRulesetConfigManager(settings, RulesetInfo);
+
+        public override RulesetSettingsSubsection CreateSettings() => new SpaceSettingsSubsection(this);
 
         protected override IEnumerable<HitResult> GetValidHitResults()
         {
@@ -50,8 +59,6 @@ namespace osu.Game.Rulesets.Space
                     return Array.Empty<Mod>();
             }
         }
-
-        public override string ShortName => "osuspaceruleset";
 
         public override IEnumerable<KeyBinding> GetDefaultKeyBindings(int variant = 0) => [];
 
