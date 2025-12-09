@@ -26,7 +26,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
         public DrawableSpaceHitObject(SpaceHitObject hitObject)
             : base(hitObject)
         {
-            Size = new Vector2(100);
+            Size = new Vector2(120);
             Origin = Anchor.Centre;
             Scale = Vector2.Zero;
             Alpha = 0;
@@ -43,7 +43,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
                 RelativeSizeAxes = Axes.Both,
                 Masking = true,
                 CornerRadius = 15,
-                BorderThickness = 15,
+                BorderThickness = 20,
                 BorderColour = Color4.White,
                 Child = box = new Box
                 {
@@ -80,7 +80,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
 
             double preempt = HitObject.TimePreempt;
 
-            const float start_z = 40f;
+            const float start_z = 50f;
             const float hit_z = 1f;
 
             float timeProgress = (float)(timeRemaining / preempt);
