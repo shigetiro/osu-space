@@ -61,8 +61,8 @@ namespace osu.Game.Rulesets.Space
             public Icon(char c)
             {
                 Size = new Vector2(20);
-                InternalChildren = new Drawable[]
-                {
+                InternalChildren =
+                [
                     new CircularContainer
                     {
                         RelativeSizeAxes = Axes.Both,
@@ -93,7 +93,7 @@ namespace osu.Game.Rulesets.Space
                             AlwaysPresent = true,
                         }
                     }
-                };
+                ];
             }
         }
 
