@@ -19,6 +19,7 @@ using osu.Game.Rulesets.Configuration;
 using osu.Game.Configuration;
 using osu.Game.Rulesets.Space.Configuration;
 using osu.Game.Overlays.Settings;
+using osu.Game.Rulesets.Space.Scoring;
 
 namespace osu.Game.Rulesets.Space
 {
@@ -29,6 +30,8 @@ namespace osu.Game.Rulesets.Space
 
         public override DrawableRuleset CreateDrawableRulesetWith(IBeatmap beatmap, IReadOnlyList<Mod>? mods = null) =>
             new DrawableSpaceRuleset(this, beatmap, mods);
+
+        public override HealthProcessor CreateHealthProcessor(double drainStartTime) => new SpaceHealthProcessor();
 
         public override IBeatmapConverter CreateBeatmapConverter(IBeatmap beatmap) =>
             new SpaceBeatmapConverter(beatmap, this);
