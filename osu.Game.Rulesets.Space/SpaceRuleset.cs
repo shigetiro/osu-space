@@ -56,11 +56,46 @@ namespace osu.Game.Rulesets.Space
         {
             switch (type)
             {
+                case ModType.DifficultyReduction:
+                    return
+                    [
+                        new SpaceModNoFail(),
+                        new MultiMod(new SpaceModHalfTime(), new SpaceModDaycore()),
+                    ];
+
+                case ModType.DifficultyIncrease:
+                    return
+                    [
+                        new MultiMod(new SpaceModPerfect()),
+                        new MultiMod(new SpaceModDoubleTime(), new SpaceModNightcore()),
+                    ];
+
+                // case ModType.Conversion:
+                //     return new Mod[]
+                //     {
+
+                //     };
+
                 case ModType.Automation:
-                    return [new SpaceModAutoplay()];
+                    return
+                    [
+                        new MultiMod(new SpaceModAutoplay(), new SpaceModCinema()),
+                    ];
+
+                case ModType.Fun:
+                    return
+                    [
+                        new MultiMod(new ModWindUp(), new ModWindDown()),
+                        new SpaceModMuted(),
+                        new ModAdaptiveSpeed(),
+                    ];
+                // case ModType.System:
+                //     return new Mod[]
+                //     {
+                //     };
 
                 default:
-                    return Array.Empty<Mod>();
+                    return [];
             }
         }
 
