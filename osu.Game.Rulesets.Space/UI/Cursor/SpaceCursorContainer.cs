@@ -82,7 +82,21 @@ namespace osu.Game.Rulesets.Space.UI.Cursor
         {
             base.OnMouseMove(e);
             if (ActiveCursor != null)
-                ActiveCursor.Position = Vector2.Clamp(ActiveCursor.Position, Vector2.Zero, DrawSize);
+            {
+                Vector2 availableSize = DrawSize * 0.6f;
+                float side = Math.Min(availableSize.X, availableSize.Y);
+                Vector2 actualSize = new Vector2(side);
+
+                Vector2 minBound = (DrawSize - actualSize) / 2;
+                Vector2 maxBound = minBound + actualSize;
+
+                ActiveCursor.Position = Vector2.Clamp(ActiveCursor.Position, minBound, maxBound);
+
+                if (cursorTrail.Drawable is CursorTrail trail)
+                {
+                    trail.AddTrail(ActiveCursor.ScreenSpaceDrawQuad.Centre);
+                }
+            }
             return false;
         }
 

@@ -30,15 +30,21 @@ namespace osu.Game.Rulesets.Space.UI
                 new Container
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Masking = true,
-                    BorderThickness = 5f,
-                    BorderColour = Color4.White,
-                    Child = playfieldBorder = new PlayfieldBorder
-                    {
-                        RelativeSizeAxes = Axes.Both,
-                    }
-                },
-                HitObjectContainer,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Masking = false,
+                    Size = new Vector2(0.6f),
+                    FillMode = FillMode.Fit,
+                    FillAspectRatio = BASE_SIZE.X / BASE_SIZE.Y,
+                    Children =
+                    [
+                        playfieldBorder = new PlayfieldBorder
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                        },
+                        HitObjectContainer
+                    ]
+                }
             ];
         }
 

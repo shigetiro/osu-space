@@ -156,15 +156,14 @@ namespace osu.Game.Rulesets.Space.UI.Cursor
         private Vector2? lastPosition;
         private readonly InputResampler resampler = new InputResampler();
 
-        public override bool ReceivePositionalInputAt(Vector2 screenSpacePos) => true;
+        public override bool ReceivePositionalInputAt(Vector2 screenSpacePos) => false;
 
         protected override bool OnMouseMove(MouseMoveEvent e)
         {
-            AddTrail(e.ScreenSpaceMousePosition);
             return base.OnMouseMove(e);
         }
 
-        protected void AddTrail(Vector2 position)
+        public void AddTrail(Vector2 position)
         {
             position = ToLocalSpace(position);
 
