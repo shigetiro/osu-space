@@ -137,6 +137,13 @@ namespace osu.Game.Rulesets.Space
                     Current = config.GetBindable<float>(SpaceRulesetSetting.Parallax),
                     KeyboardStep = 0.1f,
                 },
+                new SettingsSlider<float>
+                {
+                    LabelText = "Playfield Scale",
+                    TooltipText = "Scale of the playfield (higher values = larger playfield)",
+                    Current = config.GetBindable<float>(SpaceRulesetSetting.ScalePlayfield),
+                    KeyboardStep = 0.1f,
+                },
             };
 
             paletteSelector.SetNoticeText("Some colors extracted from Sound Space Plus (Rhythia)");

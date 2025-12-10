@@ -5,7 +5,9 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Logging;
 using osu.Game.Audio;
+using osu.Game.IO.Serialization;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.Space.Configuration;
@@ -18,7 +20,6 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
     public partial class DrawableSpaceHitObject : DrawableHitObject<SpaceHitObject>
     {
         private Container content;
-        private Box box;
 
         private readonly Bindable<float> noteOpacity = new();
         private readonly Bindable<float> noteScale = new();
@@ -38,7 +39,6 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
             Size = new Vector2(SpacePlayfield.BASE_SIZE / 3f);
             Origin = Anchor.Centre;
             Scale = Vector2.Zero;
-            Alpha = 0;
         }
 
         [Resolved]
@@ -66,7 +66,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
                 CornerRadius = SpacePlayfield.BASE_SIZE / 3f / 3f,
                 BorderThickness = SpacePlayfield.BASE_SIZE / 3f / 5.5f,
                 BorderColour = Color4.White,
-                Child = box = new Box
+                Child = new Box
                 {
                     RelativeSizeAxes = Axes.Both,
                     Alpha = 0,
@@ -94,8 +94,12 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
 
             if (Judged && Result?.Type != HitResult.Miss) return;
 
-            content.BorderThickness = SpacePlayfield.BASE_SIZE / 3f / (11f - noteThickness.Value);
-            content.CornerRadius = SpacePlayfield.BASE_SIZE / 3f / (11f - noteCornerRadius.Value);
+            var playfield = (SpacePlayfield)ruleset.Playfield;
+            float base_size = playfield.contentContainer.DrawSize.X / 3f;
+            Size = new Vector2(base_size);
+
+            content.BorderThickness = base_size / 3f / (10f - noteThickness.Value);
+            content.CornerRadius = base_size / 3f / (10f - noteCornerRadius.Value);
 
             float userNoteOpacity = noteOpacity.Value;
             float userNoteScale = noteScale.Value;

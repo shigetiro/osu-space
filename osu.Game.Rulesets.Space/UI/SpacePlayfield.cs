@@ -16,12 +16,10 @@ namespace osu.Game.Rulesets.Space.UI
     public partial class SpacePlayfield : Playfield
     {
         private readonly PlayfieldBorder playfieldBorder;
-        private readonly Container contentContainer;
+        public readonly Container contentContainer;
         private readonly Bindable<float> parallaxStrength = new();
+        private readonly Bindable<float> scalePlayfield = new();
         public static readonly float BASE_SIZE = 512;
-
-        public static readonly float PLAYFIELD_SIZE = 0.6f;
-
         protected override GameplayCursorContainer CreateCursor() => new SpaceCursorContainer
         {
             RelativeSizeAxes = Axes.Both
@@ -39,7 +37,7 @@ namespace osu.Game.Rulesets.Space.UI
                     Origin = Anchor.Centre,
                     Masking = false,
                     Size = new Vector2(
-                        0.6f
+                        0.6f // initial
                     ),
                     FillMode = FillMode.Fit,
                     FillAspectRatio = 1,
@@ -66,6 +64,7 @@ namespace osu.Game.Rulesets.Space.UI
                 Vector2 offset = (cursorPosition - center) * (0.025f * parallaxStrength.Value);
 
                 contentContainer.Position = -offset;
+                contentContainer.Size = new Vector2(scalePlayfield.Value);
             }
         }
 
@@ -74,6 +73,20 @@ namespace osu.Game.Rulesets.Space.UI
         {
             config?.BindWith(SpaceRulesetSetting.PlayfieldBorderStyle, playfieldBorder.PlayfieldBorderStyle);
             config?.BindWith(SpaceRulesetSetting.Parallax, parallaxStrength);
+            config?.BindWith(SpaceRulesetSetting.ScalePlayfield, scalePlayfield);
+        }
+
+        public new Vector2 GamefieldToScreenSpace(Vector2 point)
+        {
+            Vector2 normalized = new Vector2(point.X / BASE_SIZE, point.Y / BASE_SIZE);
+            return HitObjectContainer.ToScreenSpace(normalized * HitObjectContainer.DrawSize);
+        }
+
+        public new Vector2 ScreenSpaceToGamefield(Vector2 screenSpacePosition)
+        {
+            Vector2 local = HitObjectContainer.ToLocalSpace(screenSpacePosition);
+            Vector2 normalized = new Vector2(local.X / HitObjectContainer.DrawSize.X, local.Y / HitObjectContainer.DrawSize.Y);
+            return normalized * BASE_SIZE;
         }
     }
 }

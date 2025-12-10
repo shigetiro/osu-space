@@ -31,10 +31,19 @@ namespace osu.Game.Rulesets.Space.UI
             RelativeSizeAxes = Axes.Both,
         };
 
-        protected override ReplayInputHandler CreateReplayInputHandler(Replay replay) => new SpaceFramedReplayInputHandler(replay);
+        private SpaceFramedReplayInputHandler replayInputHandler;
+
+        protected override ReplayInputHandler CreateReplayInputHandler(Replay replay) => replayInputHandler = new SpaceFramedReplayInputHandler(replay);
 
         public override DrawableHitObject<SpaceHitObject> CreateDrawableRepresentation(SpaceHitObject h) => new DrawableSpaceHitObject(h);
 
         protected override PassThroughInputManager CreateInputManager() => new SpaceInputManager(Ruleset?.RulesetInfo);
+
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+            if (replayInputHandler != null)
+                replayInputHandler.GamefieldToScreenSpace = ((SpacePlayfield)Playfield).GamefieldToScreenSpace;
+        }
     }
 }

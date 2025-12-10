@@ -8,6 +8,8 @@ using osu.Framework.Graphics;
 using osuTK;
 using System;
 
+using osu.Game.Rulesets.Space.UI;
+
 namespace osu.Game.Rulesets.Space.Replays
 {
     public class SpaceAutoGenerator : AutoGenerator<SpaceReplayFrame>
@@ -24,7 +26,7 @@ namespace osu.Game.Rulesets.Space.Replays
             if (Beatmap.HitObjects.Count == 0)
                 return;
 
-            Frames.Add(new SpaceReplayFrame { Position = Beatmap.HitObjects[0].Position });
+            Frames.Add(new SpaceReplayFrame { Position = new Vector2(SpacePlayfield.BASE_SIZE / 2) });
 
             foreach (SpaceHitObject hitObject in Beatmap.HitObjects)
             {
@@ -67,6 +69,7 @@ namespace osu.Game.Rulesets.Space.Replays
             for (double t = moveStartTime; t < h.StartTime; t += frameInterval)
             {
                 Vector2 pos = Interpolation.ValueAt(t, startPosition, endPosition, moveStartTime, h.StartTime, Easing.Out);
+                pos = Vector2.Clamp(pos, Vector2.Zero, new Vector2(SpacePlayfield.BASE_SIZE));
                 Frames.Add(new SpaceReplayFrame
                 {
                     Time = t,

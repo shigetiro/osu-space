@@ -23,12 +23,16 @@ namespace osu.Game.Rulesets.Space.UI.Cursor
     {
         public new SpaceCursor ActiveCursor => (SpaceCursor)base.ActiveCursor;
 
+        [Resolved]
+        private SpacePlayfield playfield { get; set; }
+
         protected override Drawable CreateCursor() => new SpaceCursor();
         protected override Container<Drawable> Content => fadeContainer;
 
         private readonly Container<Drawable> fadeContainer;
 
         private readonly Bindable<bool> showTrail = new(true);
+        private readonly Bindable<float> scalePlayfield = new();
 
         private readonly SkinnableDrawable cursorTrail;
 
@@ -49,6 +53,7 @@ namespace osu.Game.Rulesets.Space.UI.Cursor
         private void load(SpaceRulesetConfigManager rulesetConfig)
         {
             rulesetConfig?.BindWith(SpaceRulesetSetting.ShowCursorTrail, showTrail);
+            rulesetConfig?.BindWith(SpaceRulesetSetting.ScalePlayfield, scalePlayfield);
         }
 
         protected override void LoadComplete()
@@ -83,7 +88,7 @@ namespace osu.Game.Rulesets.Space.UI.Cursor
             base.OnMouseMove(e);
             if (ActiveCursor != null)
             {
-                Vector2 availableSize = DrawSize * SpacePlayfield.PLAYFIELD_SIZE;
+                Vector2 availableSize = playfield.contentContainer.DrawSize;
                 float side = Math.Min(availableSize.X, availableSize.Y);
                 Vector2 actualSize = new Vector2(side);
 
