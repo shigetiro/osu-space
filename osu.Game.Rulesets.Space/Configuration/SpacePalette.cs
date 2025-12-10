@@ -8,6 +8,10 @@ namespace osu.Game.Rulesets.Space.Configuration
         White,
         [Description("purple!!! by Chedski")]
         Purple,
+        [Description("kawaii pink by michioxd")]
+        KawaiiPink,
+        [Description("kawaii pastel by michioxd")]
+        KawaiiPastel,
         [Description("Vortex")]
         Vortex,
         [Description("Cotton Candy")]
@@ -25,6 +29,6 @@ namespace osu.Game.Rulesets.Space.Configuration
         [Description("Hue Wheel by Chedski")]
         HueWheel,
         [Description("Hue Wheel Ultra by Chedski")]
-        HueWheelUltra
+        HueWheelUltra,
     }
 }
