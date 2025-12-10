@@ -14,13 +14,26 @@ Custom game mode for [osu!(lazer)](https://github.com/ppy/osu) based on [Sound S
 - Autoplay
 - enjoy
 
+## Download
+
+Visit the [Releases](https://github.com/michioxd/osu-space/releases) page to download the latest version of osu!space.
+
+[Click here to download osu!space directly](https://github.com/michioxd/osu-space/releases/latest/download/osu.Game.Rulesets.Space.dll)
+
+## Installation
+
+1. Download the `osu.Game.Rulesets.Space.dll` from the [Releases pages](https://github.com/michioxd/osu-space/releases).
+2. Copy the downloaded DLL file to your osu! data directory, maybe it is located at `C:\Users\<YourUsername>\AppData\Roaming\osu\rulesets` or `%APPDATA\osu\rulesets` (Windows).
+3. Restart osu!(lazer) if it was running.
+
 ## Contributing
 
 Contributions are welcome! If you want to contribute, please fork the repository and create a pull request.
+
+You can also contribute new color palettes for the game by opening an issue if you don't want to code.
 
 ## Have fun
 
 Interested? Support meeee!!
 
 [![BuyMeACoffee](https://raw.githubusercontent.com/pachadotdev/buymeacoffee-badges/main/bmc-yellow.svg)](https://www.buymeacoffee.com/michioxd)
-
