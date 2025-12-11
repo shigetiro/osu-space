@@ -93,6 +93,13 @@ namespace osu.Game.Rulesets.Space
                     LabelText = "Enable Grid",
                     Current = config.GetBindable<bool>(SpaceRulesetSetting.EnableGrid),
                 },
+                new SettingsSlider<float>
+                {
+                    LabelText = "Playfield Scale",
+                    TooltipText = "Scale of the playfield (higher values = larger playfield)",
+                    Current = config.GetBindable<float>(SpaceRulesetSetting.ScalePlayfield),
+                    KeyboardStep = 0.05f,
+                },
                 new SettingsSlider<float, SizeSlider<float>>
                 {
                     LabelText = SkinSettingsStrings.GameplayCursorSize,
@@ -180,13 +187,6 @@ namespace osu.Game.Rulesets.Space
                     LabelText = "Parallax Strength",
                     TooltipText = "Strength of the parallax effect on the playfield (higher values = stronger effect, 0 = disable)",
                     Current = config.GetBindable<float>(SpaceRulesetSetting.Parallax),
-                    KeyboardStep = 0.1f,
-                },
-                new SettingsSlider<float>
-                {
-                    LabelText = "Playfield Scale",
-                    TooltipText = "Scale of the playfield (higher values = larger playfield)",
-                    Current = config.GetBindable<float>(SpaceRulesetSetting.ScalePlayfield),
                     KeyboardStep = 0.1f,
                 },
                 new SettingsCheckbox
