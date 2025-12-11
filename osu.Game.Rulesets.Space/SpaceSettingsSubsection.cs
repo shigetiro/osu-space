@@ -21,6 +21,8 @@ using osu.Framework.Logging;
 using osu.Game.Overlays;
 using osu.Game.Overlays.Dialog;
 using osu.Game.Overlays.Notifications;
+using osu.Game.Graphics.Containers;
+using osu.Game.Online.API.Requests.Responses;
 
 namespace osu.Game.Rulesets.Space
 {
@@ -43,6 +45,9 @@ namespace osu.Game.Rulesets.Space
         [Resolved]
         private INotificationOverlay? notifications { get; set; }
 
+        [Resolved(CanBeNull = true)]
+        private UserProfileOverlay? userProfile { get; set; }
+
         [Resolved]
         private GameHost host { get; set; }
 
@@ -51,14 +56,21 @@ namespace osu.Game.Rulesets.Space
         {
             var config = (SpaceRulesetConfigManager)Config;
 
+            var header = new LinkFlowContainer(t => t.Font = OsuFont.GetFont(size: 14))
+            {
+                RelativeSizeAxes = Axes.X,
+                AutoSizeAxes = Axes.Y,
+                Padding = new MarginPadding { Horizontal = 20, Vertical = 0 }
+            };
+
+            header.AddText("osu!space by ");
+            header.AddLink("michioxd", () => userProfile?.ShowUser(new APIUser { Id = 16149043 }), "View profile");
+            header.AddText(" ฅ^>//<^ฅ v");
+            header.AddLink(SpaceRuleset.VERSION_STRING, "https://github.com/michioxd/osu-space/releases/tag/" + SpaceRuleset.VERSION_STRING);
+
             Children = new Drawable[]
             {
-                new SpriteText
-                {
-                    Text = "osu!space by michioxd ฅ^>//<^ฅ v" + SpaceRuleset.VERSION_STRING,
-                    Font = OsuFont.GetFont(size: 14),
-                    Padding = new MarginPadding { Horizontal = 20, Vertical = 0 }
-                },
+                header,
                 new SettingsButton
                 {
                     Text = "GitHub Repository",
