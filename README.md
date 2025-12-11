@@ -11,10 +11,14 @@ Currently still **highly under development**. Some features have been implemente
 ## Features
 
 - Unique hit objects and gameplay mechanics inspired by Sound Space.
+- Map rating system.
 - Customizable playfield.
+    - Cursor size/trail.
+    - Playfield (grid, border, scale, parallax).
+    - Note color palette (some color extracted from SSP aka Rhythia)
+    - Note (thickness, corner radius, opacity, scale, approach rate, spawn distance, fade, bloom)
 - Online check update.
 - Autoplay
-- enjoy
 
 ## Download
 
@@ -24,6 +28,7 @@ Visit the [Releases](https://github.com/michioxd/osu-space/releases) page to dow
 
 ## Installation
 
+0. Make sure your osu!(lazer) is up to date.
 1. Download the [`osu.Game.Rulesets.Space.dll`](https://github.com/michioxd/osu-space/releases/latest/download/osu.Game.Rulesets.Space.dll) from the [Releases pages](https://github.com/michioxd/osu-space/releases).
 2. Copy the downloaded DLL file to your osu! data directory, maybe it is located at:
     - Windows: `C:\Users\<YourUsername>\AppData\Roaming\osu\rulesets` or `%APPDATA%\osu\rulesets`.
@@ -43,6 +48,3 @@ You can also contribute new color palettes for the game by opening an issue if y
 Interested? Support meeee!!
 
 [![BuyMeACoffee](https://raw.githubusercontent.com/pachadotdev/buymeacoffee-badges/main/bmc-yellow.svg)](https://www.buymeacoffee.com/michioxd)
-
-
-
