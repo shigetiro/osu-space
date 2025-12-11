@@ -23,8 +23,8 @@ namespace osu.Game.Rulesets.Space.Configuration
             SetDefault(SpaceRulesetSetting.EnableGrid, false);
             SetDefault(SpaceRulesetSetting.noteOpacity, 1f, 0f, 1f, 0.01f);
             SetDefault(SpaceRulesetSetting.noteScale, 1.0f, 0.5f, 4.0f, 0.05f);
-            SetDefault(SpaceRulesetSetting.approachRate, 40f, 1f, 200f, 1f);
-            SetDefault(SpaceRulesetSetting.spawnDistance, 40f, 1f, 400f, 1f);
+            SetDefault(SpaceRulesetSetting.approachRate, 40f, 1f, 125f, 1f);
+            SetDefault(SpaceRulesetSetting.spawnDistance, 40f, 5f, 250f, 1f);
             SetDefault(SpaceRulesetSetting.fadeLength, 0.5f, 0f, 1f, 0.01f);
             SetDefault(SpaceRulesetSetting.doNotPushBack, true);
             SetDefault(SpaceRulesetSetting.halfGhost, false);

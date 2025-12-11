@@ -16,6 +16,7 @@ using osuTK;
 using osuTK.Graphics;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics.Effects;
+using osu.Framework.Extensions.PolygonExtensions;
 
 namespace osu.Game.Rulesets.Space.Objects.Drawables
 {
@@ -138,7 +139,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
 
             double timeRemaining = HitObject.StartTime - Time.Current;
             float speed = userAr;
-            float current_dist = speed * (float)(timeRemaining / 1000);
+            float current_dist = speed * (float)(timeRemaining / 1000) - ((speed <= 1f) ? 0f : 0.038f * speed);
 
             if (!Judged && current_dist > userSpawnDistance)
             {
@@ -182,12 +183,12 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
 
                 if (userHalfGhost)
                 {
-                    float fade_out_start = (12.0f / 50f) * userAr;
-                    float fade_out_end = (3.0f / 50f) * userAr;
+                    float fade_out_start = 12.0f / 50f * userAr;
+                    float fade_out_end = 3.0f / 50f * userAr;
                     float fade_out_base = 0.8f;
 
                     float fadeOutProgress = (current_dist - fade_out_end) / (fade_out_start - fade_out_end);
-                    float fadeOutAlpha = (1 - fade_out_base) + (MathF.Pow(Math.Clamp(fadeOutProgress, 0, 1), 1.3f) * fade_out_base);
+                    float fadeOutAlpha = 1 - fade_out_base + (MathF.Pow(Math.Clamp(fadeOutProgress, 0, 1), 1.3f) * fade_out_base);
 
                     alpha = Math.Min(alpha, fadeOutAlpha);
                 }
@@ -205,7 +206,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
             var cursor = ruleset.Playfield.Cursor?.ActiveCursor;
             if (cursor != null)
             {
-                if (ScreenSpaceDrawQuad.Contains(cursor.ScreenSpaceDrawQuad.Centre))
+                if (ScreenSpaceDrawQuad.Intersects(cursor.ScreenSpaceDrawQuad))
                 {
                     isHit = true;
                 }
@@ -213,13 +214,13 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
 
             if (isHit && timeOffset >= -HitObject.HitWindows.WindowFor(HitResult.Great) && timeOffset <= HitObject.HitWindows.WindowFor(HitResult.Great))
             {
-                ApplyMaxResult();
+                ApplyResult(HitResult.Perfect);
                 return;
             }
 
-            if (!HitObject.HitWindows.CanBeHit(timeOffset))
+            if (!HitObject.HitWindows.CanBeHit(timeOffset) || timeOffset > HitObject.HitWindows.WindowFor(HitResult.Great))
             {
-                ApplyMinResult();
+                ApplyResult(HitResult.Miss);
             }
         }
 
@@ -232,7 +233,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
                     break;
 
                 case ArmedState.Miss:
-                    this.FadeOut(250, Easing.InQuint).Expire();
+                    this.FadeOut(100, Easing.OutQuint).Expire();
                     break;
             }
         }
