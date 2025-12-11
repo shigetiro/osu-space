@@ -218,7 +218,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
                 return;
             }
 
-            if (!HitObject.HitWindows.CanBeHit(timeOffset) || timeOffset > HitObject.HitWindows.WindowFor(HitResult.Great))
+            if (!HitObject.HitWindows.CanBeHit(timeOffset) || timeOffset > HitObject.HitWindows.WindowFor(HitResult.Perfect))
             {
                 ApplyResult(HitResult.Miss);
             }
