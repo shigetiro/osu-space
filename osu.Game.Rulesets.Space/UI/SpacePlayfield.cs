@@ -78,8 +78,8 @@ namespace osu.Game.Rulesets.Space.UI
             config?.BindWith(SpaceRulesetSetting.Parallax, parallaxStrength);
             config?.BindWith(SpaceRulesetSetting.ScalePlayfield, scalePlayfield);
             config?.BindWith(SpaceRulesetSetting.EnableGrid, enableGrid);
-
-            enableGrid.BindValueChanged(e => grid.FadeTo(e.NewValue ? 1 : 0, 200), true);
+            grid.Alpha = enableGrid.Value ? 1 : 0;
+            enableGrid.BindValueChanged(e => grid.FadeTo(e.NewValue ? 1 : 0, 100), true);
         }
 
         public new Vector2 GamefieldToScreenSpace(Vector2 point)

@@ -172,7 +172,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
                 float alpha = 1f;
 
                 float fade_in_start = userSpawnDistance;
-                float fade_in_end = userSpawnDistance * (1.0f - userFadeLength);
+                float fade_in_end = userSpawnDistance - (userFadeLength * userAr);
 
                 if (current_dist > fade_in_end)
                 {
@@ -210,10 +210,6 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
                     isHit = true;
                 }
             }
-            else if (IsHovered)
-            {
-                isHit = true;
-            }
 
             if (isHit && timeOffset >= -HitObject.HitWindows.WindowFor(HitResult.Great) && timeOffset <= HitObject.HitWindows.WindowFor(HitResult.Great))
             {
@@ -232,11 +228,11 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
             switch (state)
             {
                 case ArmedState.Hit:
-                    this.ScaleTo(1.5f, 500, Easing.OutQuint).FadeOut(500, Easing.OutQuint).Expire();
+                    this.ScaleTo(1.2f * noteScale.Value, 200, Easing.OutQuint).FadeOut(500, Easing.OutQuint).Expire();
                     break;
 
                 case ArmedState.Miss:
-                    this.FadeColour(Color4.Red, 500, Easing.OutQuint).FadeOut(500, Easing.InQuint).Expire();
+                    this.FadeOut(250, Easing.InQuint).Expire();
                     break;
             }
         }
