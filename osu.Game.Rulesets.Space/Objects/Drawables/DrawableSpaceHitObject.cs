@@ -14,6 +14,8 @@ using osu.Game.Rulesets.Space.Configuration;
 using osu.Game.Rulesets.Space.UI;
 using osuTK;
 using osuTK.Graphics;
+using osu.Framework.Extensions.Color4Extensions;
+using osu.Framework.Graphics.Effects;
 
 namespace osu.Game.Rulesets.Space.Objects.Drawables
 {
@@ -32,6 +34,8 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
         private readonly Bindable<float> noteCornerRadius = new();
         private readonly Bindable<SpacePalette> palette = new();
         private readonly Bindable<float> scalePlayfield = new();
+        private readonly Bindable<bool> bloom = new();
+        private readonly Bindable<float> bloomStrength = new();
 
         public DrawableSpaceHitObject(SpaceHitObject hitObject)
             : base(hitObject)
@@ -58,6 +62,8 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
             config?.BindWith(SpaceRulesetSetting.NoteCornerRadius, noteCornerRadius);
             config?.BindWith(SpaceRulesetSetting.Palette, palette);
             config?.BindWith(SpaceRulesetSetting.ScalePlayfield, scalePlayfield);
+            config?.BindWith(SpaceRulesetSetting.Bloom, bloom);
+            config?.BindWith(SpaceRulesetSetting.BloomStrength, bloomStrength);
 
             AddInternal(content = new Container
             {
@@ -75,6 +81,8 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
             });
 
             palette.BindValueChanged(_ => updateColor(), true);
+            bloom.BindValueChanged(_ => updateBloom(), true);
+            bloomStrength.BindValueChanged(_ => updateBloom(), true);
         }
 
         public override IEnumerable<HitSampleInfo> GetSamples() => new[]
@@ -86,6 +94,25 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
         {
             var colors = SpacePaletteHelper.GetColors(palette.Value);
             content.Colour = colors[HitObject.Index % colors.Length];
+        }
+
+        private void updateBloom()
+        {
+            if (bloom.Value == true && bloomStrength.Value > 0)
+            {
+                content.EdgeEffect = new EdgeEffectParameters
+                {
+                    Type = EdgeEffectType.Glow,
+                    Colour = ((Color4)content.Colour).Opacity(0.5f),
+                    Radius = bloomStrength.Value * 10f,
+                    Roundness = content.CornerRadius,
+                    Hollow = true,
+                };
+            }
+            else
+            {
+                content.EdgeEffect = default;
+            }
         }
 
         protected override void Update()

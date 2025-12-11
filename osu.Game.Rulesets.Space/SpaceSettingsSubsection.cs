@@ -184,6 +184,19 @@ namespace osu.Game.Rulesets.Space
                     Current = config.GetBindable<float>(SpaceRulesetSetting.ScalePlayfield),
                     KeyboardStep = 0.1f,
                 },
+                new SettingsCheckbox
+                {
+                    LabelText = "Enable Bloom",
+                    TooltipText = "Enables a glow effect on notes",
+                    Current = config.GetBindable<bool>(SpaceRulesetSetting.Bloom)
+                },
+                new SettingsSlider<float>
+                {
+                    LabelText = "Bloom Strength",
+                    TooltipText = "Strength of the bloom effect on notes",
+                    Current = config.GetBindable<float>(SpaceRulesetSetting.BloomStrength),
+                    KeyboardStep = 0.01f,
+                },
             };
 
 
