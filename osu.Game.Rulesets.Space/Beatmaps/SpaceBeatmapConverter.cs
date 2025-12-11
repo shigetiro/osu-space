@@ -45,20 +45,20 @@ namespace osu.Game.Rulesets.Space.Beatmaps
             int streak = 0;
             if (index > 0)
             {
+                double lastTime = original.StartTime;
                 for (int i = index - 1; i >= 0; i--)
                 {
                     var prevObj = beatmap.HitObjects[i];
-                    if (original.StartTime - prevObj.StartTime > 1000) break;
-
                     var prevPos = getGridPosition(prevObj);
-                    if (prevPos.col == col && prevPos.row == row)
-                    {
-                        streak++;
-                    }
-                    else
-                    {
+
+                    if (prevPos.col != col || prevPos.row != row)
                         break;
-                    }
+
+                    if (lastTime - prevObj.StartTime > 1000)
+                        break;
+
+                    streak++;
+                    lastTime = prevObj.StartTime;
                 }
             }
 
