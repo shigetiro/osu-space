@@ -187,7 +187,7 @@ namespace osu.Game.Rulesets.Space
                 new SettingsCheckbox
                 {
                     LabelText = "Enable Bloom",
-                    TooltipText = "Enables a glow effect on notes",
+                    TooltipText = "Enables a glow effect on notes. Best used with 100% background dim and light note colors.",
                     Current = config.GetBindable<bool>(SpaceRulesetSetting.Bloom)
                 },
                 new SettingsSlider<float>
