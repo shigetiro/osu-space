@@ -67,7 +67,6 @@ namespace osu.Game.Rulesets.Space.UI
                 Vector2 offset = (cursorPosition - center) * (0.025f * parallaxStrength.Value);
 
                 contentContainer.Position = -offset;
-                contentContainer.Size = new Vector2(scalePlayfield.Value);
             }
         }
 
@@ -78,8 +77,12 @@ namespace osu.Game.Rulesets.Space.UI
             config?.BindWith(SpaceRulesetSetting.Parallax, parallaxStrength);
             config?.BindWith(SpaceRulesetSetting.ScalePlayfield, scalePlayfield);
             config?.BindWith(SpaceRulesetSetting.EnableGrid, enableGrid);
+
             grid.Alpha = enableGrid.Value ? 1 : 0;
+            contentContainer.Size = new Vector2(scalePlayfield.Value);
+
             enableGrid.BindValueChanged(e => grid.FadeTo(e.NewValue ? 1 : 0, 100), true);
+            scalePlayfield.BindValueChanged(s => contentContainer.ResizeTo(s.NewValue, 200, Easing.OutQuint), true);
         }
 
         public new Vector2 GamefieldToScreenSpace(Vector2 point)
