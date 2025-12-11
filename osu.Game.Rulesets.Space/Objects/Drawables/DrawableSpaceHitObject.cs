@@ -147,7 +147,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
                 return;
             }
 
-            if(current_dist < -1f)
+            if(current_dist < -1.25f)
             {
                 HitObject.IsOverArea = true;
             }
