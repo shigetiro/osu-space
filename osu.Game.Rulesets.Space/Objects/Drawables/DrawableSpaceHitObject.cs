@@ -18,6 +18,8 @@ using osuTK;
 using osuTK.Graphics;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics.Effects;
+using osu.Framework.Graphics.Primitives;
+using osu.Framework.Extensions.PolygonExtensions;
 
 namespace osu.Game.Rulesets.Space.Objects.Drawables
 {
@@ -217,29 +219,33 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
             if (cursor != null)
             {
                 var playfield = (SpacePlayfield)ruleset.Playfield;
-                var cursorPos = playfield.ScreenSpaceToGamefield(cursor.ScreenSpaceDrawQuad.Centre);
-
                 float cellSize = SpacePlayfield.BASE_SIZE / 3f;
 
-                int cursorCol = (int)(cursorPos.X / cellSize);
-                int cursorRow = (int)(cursorPos.Y / cellSize);
+                float cellX = HitObject.X - cellSize / 2;
+                float cellY = HitObject.Y - cellSize / 2;
 
-                int objectCol = (int)(HitObject.X / cellSize);
-                int objectRow = (int)(HitObject.Y / cellSize);
+                Vector2 tl = playfield.GamefieldToScreenSpace(new Vector2(cellX, cellY));
+                Vector2 tr = playfield.GamefieldToScreenSpace(new Vector2(cellX + cellSize, cellY));
+                Vector2 bl = playfield.GamefieldToScreenSpace(new Vector2(cellX, cellY + cellSize));
+                Vector2 br = playfield.GamefieldToScreenSpace(new Vector2(cellX + cellSize, cellY + cellSize));
 
-                if (cursorCol == objectCol && cursorRow == objectRow)
+                var cellQuad = new Quad(tl, tr, bl, br);
+
+                if (cellQuad.Intersects(cursor.ScreenSpaceDrawQuad))
                 {
                     isHit = true;
                 }
             }
 
-            if (!HitObject.HitWindows.CanBeHit(timeOffset) || timeOffset > HitObject.HitWindows.WindowFor(HitResult.Great) || HitObject.IsOverArea)
+            double hitWindow = 12;
+
+            if (!HitObject.HitWindows.CanBeHit(timeOffset) || timeOffset > hitWindow || HitObject.IsOverArea)
             {
                 ApplyResult(HitResult.Miss);
                 return;
             }
 
-            if (isHit && timeOffset >= -HitObject.HitWindows.WindowFor(HitResult.Great) && timeOffset <= HitObject.HitWindows.WindowFor(HitResult.Great))
+            if (isHit && timeOffset >= -hitWindow && timeOffset <= hitWindow)
             {
                 ApplyResult(HitResult.Perfect);
                 return;
@@ -252,7 +258,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
             switch (state)
             {
                 case ArmedState.Hit:
-                    this.ScaleTo(1.2f * noteScale.Value, 200, Easing.OutQuint).FadeOut(300, Easing.OutQuint).Expire();
+                    this.ScaleTo(Scale + new Vector2(1f * noteScale.Value), 100, Easing.OutQuint).FadeOut(200, Easing.OutQuint).Expire();
                     break;
 
                 case ArmedState.Miss:
