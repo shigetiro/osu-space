@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using osu.Game.Rulesets.Mods;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
-using osu.Framework.Logging;
 using osu.Game.Audio;
-using osu.Game.IO.Serialization;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.Space.Configuration;
@@ -20,6 +16,7 @@ using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Extensions.PolygonExtensions;
+using System.Linq;
 
 namespace osu.Game.Rulesets.Space.Objects.Drawables
 {
@@ -40,7 +37,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
         private readonly Bindable<float> scalePlayfield = new();
         private readonly Bindable<bool> bloom = new();
         private readonly Bindable<float> bloomStrength = new();
-
+        private readonly Bindable<float> hitWindow = new();
         public DrawableSpaceHitObject(SpaceHitObject hitObject)
             : base(hitObject)
         {
@@ -68,6 +65,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
             config?.BindWith(SpaceRulesetSetting.ScalePlayfield, scalePlayfield);
             config?.BindWith(SpaceRulesetSetting.Bloom, bloom);
             config?.BindWith(SpaceRulesetSetting.BloomStrength, bloomStrength);
+            config?.BindWith(SpaceRulesetSetting.HitWindow, hitWindow);
 
             AddInternal(content = new Container
             {
@@ -127,8 +125,6 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
         {
             base.Update();
 
-            if (Judged && Result?.Type != HitResult.Miss) return;
-
             var playfield = (SpacePlayfield)ruleset.Playfield;
             float base_size = playfield.contentContainer.DrawSize.X / 3f;
             Size = new Vector2(base_size);
@@ -146,17 +142,12 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
 
             double timeRemaining = HitObject.StartTime - Time.Current;
             float speed = userAr;
-            float current_dist = speed * (float)(timeRemaining / 1000) - ((speed <= 1f) ? 0f : 0.038f * speed);
+            float current_dist = speed * (float)(timeRemaining / 1000);
 
             if (!Judged && current_dist > userSpawnDistance)
             {
                 Alpha = 0;
                 return;
-            }
-
-            if (current_dist < -2.5f)
-            {
-                HitObject.IsOverArea = true;
             }
 
             if (!userDoNotPushBack && current_dist < -0.2f)
@@ -170,43 +161,49 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
 
             if (z < 0.1f) return;
 
-            float scale = camera_z / z;
-            Scale = new Vector2(scale * userNoteScale);
+            float rawScale = camera_z / z;
 
-            Vector2 targetRelative = new Vector2(HitObject.X / SpacePlayfield.BASE_SIZE, HitObject.Y / SpacePlayfield.BASE_SIZE);
+            if (rawScale >= 2f && HitObject.row == 1 || (rawScale >= 1f && HitObject.IsHitOk))
+            {
+                Alpha = 0;
+                Scale = new Vector2(2f);
+                return;
+            }
+
+            Scale = new Vector2(rawScale * userNoteScale);
+
+            Vector2 targetRelative = new Vector2((HitObject.col + 0.5f) / 3f, (HitObject.row + 0.5f) / 3f);
             Vector2 center = new Vector2(0.5f, 0.5f);
             Vector2 offset = targetRelative - center;
 
-            Position = center + offset * scale;
+            Position = center + offset * rawScale;
             RelativePositionAxes = Axes.Both;
 
-            if (!Judged)
+
+            float alpha = 1f;
+
+            float fade_in_start = userSpawnDistance;
+            float fade_in_end = userSpawnDistance - (userFadeLength * userAr);
+
+            if (current_dist > fade_in_end)
             {
-                float alpha = 1f;
-
-                float fade_in_start = userSpawnDistance;
-                float fade_in_end = userSpawnDistance - (userFadeLength * userAr);
-
-                if (current_dist > fade_in_end)
-                {
-                    float fadeProgress = (fade_in_start - current_dist) / (fade_in_start - fade_in_end);
-                    alpha = MathF.Pow(Math.Clamp(fadeProgress, 0, 1), 1.3f);
-                }
-
-                if (userHalfGhost)
-                {
-                    float fade_out_start = 12.0f / 50f * userAr;
-                    float fade_out_end = 3.0f / 50f * userAr;
-                    float fade_out_base = 0.8f;
-
-                    float fadeOutProgress = (current_dist - fade_out_end) / (fade_out_start - fade_out_end);
-                    float fadeOutAlpha = 1 - fade_out_base + (MathF.Pow(Math.Clamp(fadeOutProgress, 0, 1), 1.3f) * fade_out_base);
-
-                    alpha = Math.Min(alpha, fadeOutAlpha);
-                }
-
-                Alpha = alpha * userNoteOpacity;
+                float fadeProgress = (fade_in_start - current_dist) / (fade_in_start - fade_in_end);
+                alpha = MathF.Pow(Math.Clamp(fadeProgress, 0, 1), 1.3f);
             }
+
+            if (userHalfGhost)
+            {
+                float fade_out_start = 12.0f / 50f * userAr;
+                float fade_out_end = 3.0f / 50f * userAr;
+                float fade_out_base = 0.8f;
+
+                float fadeOutProgress = (current_dist - fade_out_end) / (fade_out_start - fade_out_end);
+                float fadeOutAlpha = 1 - fade_out_base + (MathF.Pow(Math.Clamp(fadeOutProgress, 0, 1), 1.3f) * fade_out_base);
+
+                alpha = Math.Min(alpha, fadeOutAlpha);
+            }
+
+            Alpha = alpha * userNoteOpacity;
         }
 
         protected override void CheckForResult(bool userTriggered, double timeOffset)
@@ -237,32 +234,30 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
                 }
             }
 
-            double hitWindow = 12;
-
-            if (!HitObject.HitWindows.CanBeHit(timeOffset) || timeOffset > hitWindow || HitObject.IsOverArea)
+            if (!HitObject.HitWindows.CanBeHit(timeOffset))
             {
                 ApplyResult(HitResult.Miss);
                 return;
             }
 
-            if (isHit && timeOffset >= -hitWindow && timeOffset <= hitWindow)
+            if (isHit && timeOffset >= -hitWindow.Value && timeOffset <= hitWindow.Value)
             {
                 ApplyResult(HitResult.Perfect);
+                HitObject.IsHitOk = true;
                 return;
             }
-
         }
 
         protected override void UpdateHitStateTransforms(ArmedState state)
         {
             switch (state)
             {
-                case ArmedState.Hit:
-                    this.ScaleTo(Scale + new Vector2(1f * noteScale.Value), 100, Easing.OutQuint).FadeOut(200, Easing.OutQuint).Expire();
-                    break;
+                // case ArmedState.Hit:
+                //     this.FadeOut(50, Easing.OutQuint).Expire();
+                //     break;
 
                 case ArmedState.Miss:
-                    this.FadeOut(150, Easing.OutQuint).Expire();
+                    this.FadeOut(0, Easing.OutQuint).Expire();
                     break;
             }
         }

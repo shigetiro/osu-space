@@ -9,9 +9,11 @@ namespace osu.Game.Rulesets.Space.Objects
 {
     public class SpaceHitObject : HitObject
     {
-        public bool IsOverArea = false;
+        public bool IsHitOk { get; set; } = false;
         public float X { get; set; }
         public float Y { get; set; }
+        public int col { get; set; }
+        public int row { get; set; }
         public override Judgement CreateJudgement() => new Judgement();
 
         public Vector2 Position

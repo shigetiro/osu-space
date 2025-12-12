@@ -95,6 +95,8 @@ namespace osu.Game.Rulesets.Space.Beatmaps
                 StartTime = original.StartTime,
                 X = (col + 0.5f) * (SpacePlayfield.BASE_SIZE / 3f),
                 Y = (row + 0.5f) * (SpacePlayfield.BASE_SIZE / 3f),
+                col = col,
+                row = row
             };
         }
 

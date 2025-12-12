@@ -37,6 +37,7 @@ namespace osu.Game.Rulesets.Space.Configuration
             SetDefault(SpaceRulesetSetting.ShowCursorTrail, true);
             SetDefault(SpaceRulesetSetting.Bloom, false);
             SetDefault(SpaceRulesetSetting.BloomStrength, 1.0f, 0.1f, 10f, 0.01f);
+            SetDefault(SpaceRulesetSetting.HitWindow, 25f, 0f, 250f, 1f);
         }
     }
 
@@ -60,5 +61,6 @@ namespace osu.Game.Rulesets.Space.Configuration
         GameplayCursorSize,
         Bloom,
         BloomStrength,
+        HitWindow
     }
 }
