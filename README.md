@@ -49,8 +49,3 @@ You can also contribute new color palettes for the game by opening an issue if y
 Interested? Support meeee!!
 
 [![BuyMeACoffee](https://raw.githubusercontent.com/pachadotdev/buymeacoffee-badges/main/bmc-yellow.svg)](https://www.buymeacoffee.com/michioxd)
-
-
-
-
-
