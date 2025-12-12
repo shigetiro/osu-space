@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using osu.Game.Rulesets.Mods;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
@@ -37,6 +39,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
         private readonly Bindable<float> scalePlayfield = new();
         private readonly Bindable<bool> bloom = new();
         private readonly Bindable<float> bloomStrength = new();
+        private readonly Bindable<bool> autoplayNoMiss = new();
 
         public DrawableSpaceHitObject(SpaceHitObject hitObject)
             : base(hitObject)
@@ -65,6 +68,7 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
             config?.BindWith(SpaceRulesetSetting.ScalePlayfield, scalePlayfield);
             config?.BindWith(SpaceRulesetSetting.Bloom, bloom);
             config?.BindWith(SpaceRulesetSetting.BloomStrength, bloomStrength);
+            config?.BindWith(SpaceRulesetSetting.AutoplayNoMiss, autoplayNoMiss);
 
             AddInternal(content = new Container
             {
@@ -205,6 +209,15 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
         protected override void CheckForResult(bool userTriggered, double timeOffset)
         {
             if (Judged) return;
+
+            if (ruleset.Mods.Any(m => m is ModAutoplay))
+            {
+                if (timeOffset >= -50 && autoplayNoMiss.Value)
+                {
+                    ApplyResult(HitResult.Perfect);
+                    return;
+                }
+            }
 
             bool isHit = false;
 

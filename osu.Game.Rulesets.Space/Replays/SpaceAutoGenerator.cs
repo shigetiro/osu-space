@@ -55,7 +55,7 @@ namespace osu.Game.Rulesets.Space.Replays
             moveStartTime = Math.Max(moveStartTime, lastFrame.Time);
             moveStartTime = Math.Min(moveStartTime, h.StartTime);
 
-            double frameInterval = 1000.0 / 1000.0;
+            double frameInterval = 1000.0 / 60.0;
 
             for (double t = lastFrame.Time + frameInterval; t < moveStartTime; t += frameInterval)
             {
