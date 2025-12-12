@@ -152,12 +152,12 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
                 return;
             }
 
-            if (current_dist < -1.5f)
+            if (current_dist < -1f)
             {
                 HitObject.IsOverArea = true;
             }
 
-            if (!userDoNotPushBack && current_dist < -0.1f)
+            if (!userDoNotPushBack && current_dist < -0.2f)
             {
                 Alpha = 0;
                 return;
@@ -252,11 +252,11 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
             switch (state)
             {
                 case ArmedState.Hit:
-                    this.ScaleTo(1.2f * noteScale.Value, 200, Easing.OutQuint).FadeOut(500, Easing.OutQuint).Expire();
+                    this.ScaleTo(1.2f * noteScale.Value, 200, Easing.OutQuint).FadeOut(300, Easing.OutQuint).Expire();
                     break;
 
                 case ArmedState.Miss:
-                    this.FadeOut(250, Easing.OutQuint).Expire();
+                    this.FadeOut(150, Easing.OutQuint).Expire();
                     break;
             }
         }

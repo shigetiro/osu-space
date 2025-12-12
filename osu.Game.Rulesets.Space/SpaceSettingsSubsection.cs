@@ -171,7 +171,7 @@ namespace osu.Game.Rulesets.Space
                 new SettingsCheckbox
                 {
                     LabelText = "Do not push back",
-                    TooltipText = "While enabled, notes will go past the grid when you miss, instead of always vanishing 0.1 units past the grid",
+                    TooltipText = "While enabled, notes will go past the grid when you miss, instead of always vanishing 0.2 units past the grid",
                     Keywords = new[] { "miss", "push", "back" },
                     Current = config.GetBindable<bool>(SpaceRulesetSetting.doNotPushBack)
                 },
