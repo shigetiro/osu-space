@@ -33,9 +33,10 @@ Visit the [Releases](https://github.com/michioxd/osu-space/releases) page to dow
 1. Download the [`osu.Game.Rulesets.Space.dll`](https://github.com/michioxd/osu-space/releases/latest/download/osu.Game.Rulesets.Space.dll) from the [Releases pages](https://github.com/michioxd/osu-space/releases).
 2. Copy the downloaded DLL file to your osu! data directory, maybe it is located at:
     - Windows: `C:\Users\<YourUsername>\AppData\Roaming\osu\rulesets` or `%APPDATA%\osu\rulesets`.
+    - Linux: `~/.local/share/osu/rulesets`
     - Android: `/storage/emulated/0/Android/data/sh.ppy.osulazer/files/rulesets`.
     - iOS: `who knows lol`.
-    - macOS: `who knows too lol`.
+    - macOS: `~/Library/Application Support/osu/rulesets`.
 3. Restart osu!(lazer) if it was running.
 
 ## Contributing
@@ -49,3 +50,4 @@ You can also contribute new color palettes for the game by opening an issue if y
 Interested? Support meeee!!
 
 [![BuyMeACoffee](https://raw.githubusercontent.com/pachadotdev/buymeacoffee-badges/main/bmc-yellow.svg)](https://www.buymeacoffee.com/michioxd)
+
