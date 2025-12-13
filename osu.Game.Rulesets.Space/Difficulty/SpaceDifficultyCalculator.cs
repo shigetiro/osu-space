@@ -7,7 +7,6 @@ using osu.Game.Rulesets.Difficulty;
 using osu.Game.Rulesets.Difficulty.Preprocessing;
 using osu.Game.Rulesets.Difficulty.Skills;
 using osu.Game.Rulesets.Mods;
-
 using osu.Game.Rulesets.Space.Difficulty.Preprocessing;
 using osu.Game.Rulesets.Space.Difficulty.Skills;
 using osu.Game.Rulesets.Space.Objects;
@@ -27,8 +26,8 @@ namespace osu.Game.Rulesets.Space
                 return new DifficultyAttributes(mods, 0);
 
             double aimRating = Math.Sqrt(skills[0].DifficultyValue()) * 0.15;
-
-            double starRating = aimRating;
+            double readingRating = Math.Sqrt(skills[1].DifficultyValue()) * 0.15;
+            double starRating = aimRating + readingRating;
 
             return new DifficultyAttributes(mods, starRating);
         }
@@ -56,6 +55,7 @@ namespace osu.Game.Rulesets.Space
             return
             [
                 new Aim(mods),
+                new Reading(mods),
             ];
         }
     }
