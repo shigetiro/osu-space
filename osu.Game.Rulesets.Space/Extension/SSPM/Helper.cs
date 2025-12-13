@@ -110,6 +110,8 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
             string filename = $"{id} {name}".ReplaceAny(Path.GetInvalidFileNameChars(), '_');
             string oszPath = Path.Combine(Path.GetDirectoryName(originalPath), $"{filename}.osz");
 
+            if (File.Exists(oszPath))
+                File.Delete(oszPath);
             using (var zip = ZipFile.Open(oszPath, ZipArchiveMode.Create))
             {
                 string audioFilename = "audio.mp3";
