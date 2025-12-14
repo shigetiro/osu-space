@@ -25,11 +25,20 @@ namespace osu.Game.Rulesets.Space
             if (beatmap.HitObjects.Count == 0)
                 return new DifficultyAttributes(mods, 0);
 
-            double aimRating = Math.Sqrt(skills[0].DifficultyValue()) * 0.1;
-            double readingRating = Math.Sqrt(skills[1].DifficultyValue()) * 0.1;
-            double starRating = aimRating + readingRating;
+            double aimRating = Math.Sqrt(skills[0].DifficultyValue()) * 0.0675;
+            double readingRating = Math.Sqrt(skills[1].DifficultyValue()) * 0.0675;
 
-            return new DifficultyAttributes(mods, starRating);
+            double baseRating = Math.Pow(
+                Math.Pow(aimRating, 1.1) +
+                Math.Pow(readingRating, 1.1),
+                1.0 / 1.1
+            );
+
+            double starRating = baseRating;
+
+            var attributes = new DifficultyAttributes(mods, starRating);
+
+            return attributes;
         }
 
         protected override IEnumerable<DifficultyHitObject> CreateDifficultyHitObjects(IBeatmap beatmap, double clockRate)

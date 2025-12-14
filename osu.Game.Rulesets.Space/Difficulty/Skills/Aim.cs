@@ -43,7 +43,9 @@ namespace osu.Game.Rulesets.Space.Difficulty.Skills
             if (spaceCurrent.Angle != null)
             {
                 double angle = spaceCurrent.Angle.Value;
-                angleBonus = 1.0 + 0.5 * (angle / Math.PI);
+
+                double angleFactor = Math.Sin(angle);
+                angleBonus = 1.0 + 0.5 * angleFactor;
             }
 
             return velocity * angleBonus;
