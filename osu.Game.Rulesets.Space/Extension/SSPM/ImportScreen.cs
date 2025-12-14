@@ -172,8 +172,11 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
 
             foreach (string path in candidatePaths)
             {
-                if (tryPromptImportFromPath(path))
+                if (tryCheckThePath(path))
+                {
+                    dialogOverlay?.Push(new ImportConfirmationDialog(path, () => startImport(path), () => { }));
                     return;
+                }
             }
 
             notifications?.Post(new SimpleNotification
@@ -183,14 +186,13 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
             });
         }
 
-        private bool tryPromptImportFromPath(string path)
+        private bool tryCheckThePath(string path)
         {
             if (!Directory.Exists(path))
                 return false;
             string[] files = Directory.GetFiles(path, "*.sspm");
             if (files.Length > 0)
             {
-                dialogOverlay?.Push(new ImportConfirmationDialog(path, () => startImport(path), () => { }));
                 return true;
             }
             return false;
@@ -208,7 +210,7 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
                 return;
             }
 
-            if (!tryPromptImportFromPath(path))
+            if (!tryCheckThePath(path))
             {
                 notifications?.Post(new SimpleNotification
                 {
@@ -245,12 +247,6 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
                     notification.Progress = (float)current / total;
                     if (done)
                     {
-                        if (failed > 0)
-                            notifications?.Post(new SimpleNotification
-                            {
-                                Text = $"Import completed with {failed} failed imports. Please check the logs for more details.",
-                                Icon = FontAwesome.Solid.ExclamationTriangle,
-                            });
                         notification.State = ProgressNotificationState.Completed;
                     }
                 });
