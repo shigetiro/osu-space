@@ -21,6 +21,9 @@ using osu.Game.Overlays.Dialog;
 using System.Collections.Immutable;
 using osu.Game.Database;
 using System.Linq;
+using System.Drawing;
+using osu.Game.Screens.OnlinePlay.Match.Components;
+using System.IO;
 
 namespace osu.Game.Rulesets.Space.Extension.SSPM
 {
@@ -61,9 +64,6 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
         [BackgroundDependencyLoader]
         private void load()
         {
-            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string userHomePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string initialPath = userHomePath;
 
             realm.Write(r =>
             {
@@ -75,15 +75,6 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
                     {
                         this.Exit();
                     }));
-                }
-                else
-                {
-                    string sspMapsPath = System.IO.Path.Combine(appData, "SoundSpacePlus", "maps");
-
-                    if (System.IO.Directory.Exists(sspMapsPath))
-                    {
-                        dialogOverlay?.Push(new ImportConfirmationDialog(sspMapsPath, () => startImport(sspMapsPath), () => { }));
-                    }
                 }
             });
 
@@ -127,7 +118,7 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
                                 },
                                 new Drawable[]
                                 {
-                                    directorySelector = new OsuDirectorySelector(initialPath)
+                                    directorySelector = new OsuDirectorySelector
                                     {
                                         RelativeSizeAxes = Axes.Both,
                                     }
@@ -146,9 +137,17 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
                                             {
                                                 Anchor = Anchor.Centre,
                                                 Origin = Anchor.Centre,
-                                                Width = 300,
+                                                Width = 150,
                                                 Text = "Import",
                                                 Action = import
+                                            },
+                                            new PurpleRoundedButton
+                                            {
+                                                Anchor = Anchor.Centre,
+                                                Origin = Anchor.Centre,
+                                                Width = 300,
+                                                Text = "Try to locate the Rhythia (SSP) folder",
+                                                Action = scanAndImportFromSSP
                                             },
                                         }
                                     }
@@ -161,6 +160,42 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
         }
 
         private void import() => startImport(directorySelector?.CurrentPath.Value?.FullName);
+
+        private void scanAndImportFromSSP()
+        {
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string[] candidatePaths =
+            [
+                Path.Combine(appData, "SoundSpacePlus", "maps"),
+                Path.Combine(localAppData, "SoundSpacePlus", "maps")
+            ];
+
+            foreach (string path in candidatePaths)
+            {
+                if (tryPromptImportFromPath(path))
+                    return;
+            }
+
+            notifications?.Post(new SimpleNotification
+            {
+                Text = "No Sound Space Plus maps folder was detected, or no .sspm files were found inside that. Please select the folder manually.",
+                Icon = FontAwesome.Solid.ExclamationTriangle,
+            });
+        }
+
+        private bool tryPromptImportFromPath(string path)
+        {
+            if (!Directory.Exists(path))
+                return false;
+            string[] files = Directory.GetFiles(path, "*.sspm");
+            if (files.Length > 0)
+            {
+                dialogOverlay?.Push(new ImportConfirmationDialog(path, () => startImport(path), () => { }));
+                return true;
+            }
+            return false;
+        }
 
         private void startImport(string? path)
         {
