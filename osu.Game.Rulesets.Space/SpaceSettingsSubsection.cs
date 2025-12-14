@@ -24,9 +24,7 @@ using osu.Game.Overlays.Notifications;
 using osu.Game.Graphics.Containers;
 using osu.Game.Online.API.Requests.Responses;
 using osu.Game.Overlays.Settings.Sections;
-using osu.Game.Overlays.Settings.Sections.Maintenance;
 using osu.Game.Rulesets.Space.Extension.SSPM;
-using osu.Game.Rulesets.Space.UI;
 using osu.Framework.Screens;
 
 namespace osu.Game.Rulesets.Space

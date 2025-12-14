@@ -18,7 +18,6 @@ using System.Threading.Tasks;
 using osu.Game.Beatmaps;
 using System;
 using osu.Game.Overlays.Dialog;
-using System.Collections.Immutable;
 using osu.Game.Database;
 using System.Linq;
 using System.Drawing;
@@ -288,7 +287,7 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
             public ConfirmRebootToApply(Action onCancel)
             {
                 HeaderText = "osu!space need you to restart the game";
-                BodyText = "Since you have previously installed an earlier version of osu!space, and this update includes breaking changes. To use this feature, a game restart is required to apply the fixes. Please restart the game to ensure everything works correctly.";
+                BodyText = "Since you have previously installed an earlier version of osu!space (below 2025.1214.0), and this update includes breaking changes. To use this feature, a game restart is required to apply the fixes. Please restart the game to ensure everything works correctly.";
                 Icon = FontAwesome.Solid.ExclamationTriangle;
                 Buttons =
                 [
