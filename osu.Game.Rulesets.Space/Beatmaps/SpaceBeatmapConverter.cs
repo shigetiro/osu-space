@@ -44,29 +44,31 @@ namespace osu.Game.Rulesets.Space.Beatmaps
                 }
             }
 
-            int streak = 0;
-            if (index > 0)
+            if (beatmap.BeatmapInfo.Ruleset.ShortName != "osuspaceruleset")
             {
-                double lastTime = original.StartTime;
-                for (int i = index - 1; i >= 0; i--)
+                int streak = 0;
+                if (index > 0)
                 {
-                    var prevObj = beatmap.HitObjects[i];
-                    var prevPos = getGridPosition(prevObj);
+                    double lastTime = original.StartTime;
+                    for (int i = index - 1; i >= 0; i--)
+                    {
+                        var prevObj = beatmap.HitObjects[i];
+                        var prevPos = getGridPosition(prevObj);
 
-                    if (prevPos.col != col || prevPos.row != row)
-                        break;
+                        if (prevPos.col != col || prevPos.row != row)
+                            break;
 
-                    if (lastTime - prevObj.StartTime > 1000)
-                        break;
+                        if (lastTime - prevObj.StartTime > 1000)
+                            break;
 
-                    streak++;
-                    lastTime = prevObj.StartTime;
+                        streak++;
+                        lastTime = prevObj.StartTime;
+                    }
                 }
-            }
 
-            if (streak > 0)
-            {
-                var ringPath = new List<(int c, int r)>
+                if (streak > 0)
+                {
+                    var ringPath = new List<(int c, int r)>
                 {
                     (0, 2), (1, 2), (2, 2),
                     (2, 1),
@@ -74,19 +76,20 @@ namespace osu.Game.Rulesets.Space.Beatmaps
                     (0, 1)
                 };
 
-                int startIndex = ringPath.IndexOf((col, row));
+                    int startIndex = ringPath.IndexOf((col, row));
 
-                if (startIndex != -1)
-                {
-                    var newPos = ringPath[(startIndex + streak) % ringPath.Count];
-                    col = newPos.c;
-                    row = newPos.r;
-                }
-                else
-                {
-                    var newPos = ringPath[(streak - 1) % ringPath.Count];
-                    col = newPos.c;
-                    row = newPos.r;
+                    if (startIndex != -1)
+                    {
+                        var newPos = ringPath[(startIndex + streak) % ringPath.Count];
+                        col = newPos.c;
+                        row = newPos.r;
+                    }
+                    else
+                    {
+                        var newPos = ringPath[(streak - 1) % ringPath.Count];
+                        col = newPos.c;
+                        row = newPos.r;
+                    }
                 }
             }
 
@@ -100,6 +103,7 @@ namespace osu.Game.Rulesets.Space.Beatmaps
                 col = col,
                 row = row
             };
+
         }
 
         private (int col, int row) getGridPosition(HitObject hitObject)
