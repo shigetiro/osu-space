@@ -5,6 +5,7 @@ using osuTK.Graphics;
 using osuTK;
 using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Sprites;
+using System;
 
 namespace osu.Game.Rulesets.Space.UI
 {
@@ -31,8 +32,7 @@ namespace osu.Game.Rulesets.Space.UI
 
         public void ShowMiss(float col, float row)
         {
-            if (col < 0 || col > 2 || row < 0 || row > 2) return;
-            int index = (int)(row * 3 + col);
+            int index = Math.Clamp((int)Math.Round(row * 3 + col), 0, 8);
             icons[index].Show();
         }
     }

@@ -251,10 +251,10 @@ namespace osu.Game.Rulesets.Space.Objects.Drawables
             switch (state)
             {
                 case ArmedState.Hit:
-                    this.FadeOut(150, Easing.OutQuint).Expire();
+                    this.FadeOut(100, Easing.OutQuint).Expire();
                     break;
                 case ArmedState.Miss:
-                    ((SpacePlayfield)ruleset.Playfield).spaceMiss.ShowMiss(HitObject.X, HitObject.Y);
+                    ((SpacePlayfield)ruleset.Playfield).spaceMiss.ShowMiss(HitObject.oX, HitObject.oY);
                     this.FadeOut(0, Easing.OutQuint).Expire();
                     break;
             }
