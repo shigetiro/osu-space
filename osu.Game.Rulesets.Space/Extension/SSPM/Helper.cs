@@ -86,10 +86,10 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
 
             foreach (var note in notes)
             {
-                float ox = (note.x + 0.5f) * (512f / 3f);
-                float oy = (note.y + 0.5f) * (512f / 3f);
+                float ox = note.x * 1e4f;
+                float oy = note.y * 1e4f;
 
-                sb.AppendLine($"{Math.Round(ox)},{Math.Round(oy)},{note.time},1,0,0:0:0:0:");
+                sb.AppendLine($"{ox},{oy},{note.time},1,0,0:0:0:0:");
             }
 
             return sb.ToString();

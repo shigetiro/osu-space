@@ -25,7 +25,7 @@ namespace osu.Game.Rulesets.Space.Beatmaps
 
         protected override IEnumerable<SpaceHitObject> ConvertHitObject(HitObject original, IBeatmap beatmap, CancellationToken cancellationToken)
         {
-            var (col, row) = getGridPosition(original);
+            var (col, row) = getGridPosition(original, beatmap.BeatmapInfo.Ruleset.ShortName != "osuspaceruleset");
 
             int index = -1;
             if (beatmap.HitObjects is IList<HitObject> list)
@@ -115,8 +115,12 @@ namespace osu.Game.Rulesets.Space.Beatmaps
             return -1;
         }
 
-        private static (float col, float row) getGridPosition(HitObject hitObject)
+        private static (float col, float row) getGridPosition(HitObject hitObject, bool isOSpaceBeatmap = false)
         {
+            if (isOSpaceBeatmap)
+            {
+                return (((IHasXPosition)hitObject).X / 1e4f, ((IHasYPosition)hitObject).Y / 1e4f);
+            }
             float x = ((IHasXPosition)hitObject).X;
             float y = ((IHasYPosition)hitObject).Y;
             return (
