@@ -24,6 +24,8 @@ using System.Drawing;
 using osu.Game.Screens.OnlinePlay.Match.Components;
 using System.IO;
 using osu.Game.Screens.SelectV2;
+using Microsoft.Extensions.Logging;
+using osu.Framework.Logging;
 
 namespace osu.Game.Rulesets.Space.Extension.SSPM
 {
@@ -201,64 +203,76 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
 
         private void startImport(string? path)
         {
-            if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
+            try
             {
-                notifications?.Post(new SimpleNotification
+                if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
                 {
-                    Text = "Please select a valid directory.",
-                    Icon = FontAwesome.Solid.ExclamationTriangle,
-                });
-                return;
-            }
-
-            if (!tryCheckThePath(path))
-            {
-                notifications?.Post(new SimpleNotification
-                {
-                    Text = "No .sspm files found in the selected directory. Please select a different folder.",
-                    Icon = FontAwesome.Solid.ExclamationTriangle,
-                });
-                return;
-            }
-
-            var notification = new ProgressNotification
-            {
-                Text = "Importing Sound Space Plus map files...",
-                CompletionText = "Import Sound Space Plus map complete!",
-                State = ProgressNotificationState.Active,
-                CompletionClickAction = () =>
-                {
-                    game?.PerformFromScreen(s => s.Push(new SoloSongSelect()));
-                    return true;
+                    notifications?.Post(new SimpleNotification
+                    {
+                        Text = "Please select a valid directory.",
+                        Icon = FontAwesome.Solid.ExclamationTriangle,
+                    });
+                    return;
                 }
-            };
-            notifications?.Post(notification);
 
-            Task.Run(() =>
-            {
-                var importer = new SSPMConverter(beatmapManager!, rulesets!);
-                importer.ImportFromDirectory(path, notification.CancellationToken, (current, total, failed, done, noFile) =>
+                if (!tryCheckThePath(path))
                 {
-                    if (notification.State == ProgressNotificationState.Cancelled)
-                        return;
-
-                    if (noFile)
+                    notifications?.Post(new SimpleNotification
                     {
-                        notification.State = ProgressNotificationState.Cancelled;
-                        notification.Text = "No .sspm files found to import.";
-                        return;
-                    }
+                        Text = "No .sspm files found in the selected directory. Please select a different folder.",
+                        Icon = FontAwesome.Solid.ExclamationTriangle,
+                    });
+                    return;
+                }
 
-                    notification.Text = $"Importing Sound Space Plus map files ({current}/{total})...";
-                    notification.Progress = (float)current / total;
-                    if (done)
+                var notification = new ProgressNotification
+                {
+                    Text = "Importing Sound Space Plus map files...",
+                    CompletionText = "Import Sound Space Plus map complete!",
+                    State = ProgressNotificationState.Active,
+                    CompletionClickAction = () =>
                     {
-                        notification.State = ProgressNotificationState.Completed;
+                        game?.PerformFromScreen(s => s.Push(new SoloSongSelect()));
+                        return true;
                     }
+                };
+                notifications?.Post(notification);
+
+                Task.Run(() =>
+                {
+                    var importer = new SSPMConverter(beatmapManager!, rulesets!);
+                    importer.ImportFromDirectory(path, notification.CancellationToken, (current, total, failed, done, noFile) =>
+                    {
+                        if (notification.State == ProgressNotificationState.Cancelled)
+                            return;
+
+                        if (noFile)
+                        {
+                            notification.State = ProgressNotificationState.Cancelled;
+                            notification.Text = "No .sspm files found to import.";
+                            return;
+                        }
+
+                        notification.Text = $"Importing Sound Space Plus map files ({current}/{total})...";
+                        notification.Progress = (float)current / total;
+                        if (done)
+                        {
+                            notification.State = ProgressNotificationState.Completed;
+                        }
+                    });
                 });
-            });
 
-            this.Exit();
+                this.Exit();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Failed to import SSPM files.", LoggingTarget.Runtime);
+                notifications?.Post(new SimpleNotification
+                {
+                    Text = "An error occurred while importing .sspm files. Please try again.",
+                    Icon = FontAwesome.Solid.ExclamationTriangle,
+                });
+            }
         }
 
         private partial class ImportConfirmationDialog : PopupDialog
