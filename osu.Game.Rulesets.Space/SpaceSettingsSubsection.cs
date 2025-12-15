@@ -30,6 +30,7 @@ using System;
 using osu.Game.Database;
 using osu.Game.Beatmaps;
 using System.Linq;
+using osu.Game.Screens.Menu;
 
 namespace osu.Game.Rulesets.Space
 {
@@ -255,42 +256,60 @@ namespace osu.Game.Rulesets.Space
             game?.PerformFromScreen(s => s.Push(new SSPMImportScreen()));
         }
 
+        private void goHome(Action execute)
+        {
+            game?.PerformFromScreen(s =>
+            {
+                if (s is MainMenu || s is IntroScreen)
+                {
+                    execute?.Invoke();
+                    return;
+                }
+
+                s.Exit();
+                Scheduler.AddDelayed(() => goHome(execute), 100);
+            });
+        }
+
         private void deleteAllBeatmaps()
         {
             dialogOverlay?.Push(new DeleteAllBeatmapDialog(() =>
             {
-                if (currentBeatmap.Value.BeatmapInfo?.Ruleset?.ShortName == "osuspaceruleset")
+                goHome(() =>
                 {
-                    currentBeatmap.Value = (WorkingBeatmap)beatmapManager.DefaultBeatmap;
-                }
-                realm.Write(r =>
-                {
-                    var beatmapsToDelete = r.All<BeatmapInfo>()
-                        .Where(b => b.Ruleset != null)
-                        .ToList()
-                        .Where(b => b.Ruleset.ShortName == "osuspaceruleset")
-                        .ToList();
-
-                    foreach (var beatmap in beatmapsToDelete)
+                    if (currentBeatmap.Value.BeatmapInfo?.Ruleset?.ShortName == "osuspaceruleset")
                     {
-                        var parentSet = beatmap.BeatmapSet;
+                        currentBeatmap.Value = (WorkingBeatmap)beatmapManager.DefaultBeatmap;
+                    }
+                    realm.Write(r =>
+                    {
+                        var beatmapsToDelete = r.All<BeatmapInfo>()
+                            .Where(b => b.Ruleset != null)
+                            .ToList()
+                            .Where(b => b.Ruleset.ShortName == "osuspaceruleset")
+                            .ToList();
 
-                        if (parentSet != null)
+                        foreach (var beatmap in beatmapsToDelete)
                         {
-                            parentSet.Beatmaps.Remove(beatmap);
-                            r.Remove(beatmap);
+                            var parentSet = beatmap.BeatmapSet;
 
-                            if (parentSet.Beatmaps.Count == 0)
+                            if (parentSet != null)
                             {
-                                parentSet.DeletePending = true;
+                                parentSet.Beatmaps.Remove(beatmap);
+                                r.Remove(beatmap);
+
+                                if (parentSet.Beatmaps.Count == 0)
+                                {
+                                    parentSet.DeletePending = true;
+                                }
                             }
                         }
-                    }
-                });
-                notifications?.Post(new SimpleNotification
-                {
-                    Text = "All osu!space beatmaps added to deletion queue.",
-                    Icon = FontAwesome.Solid.Trash,
+                    });
+                    notifications?.Post(new SimpleNotification
+                    {
+                        Text = "All osu!space beatmaps added to deletion queue.",
+                        Icon = FontAwesome.Solid.Trash,
+                    });
                 });
             }));
         }
