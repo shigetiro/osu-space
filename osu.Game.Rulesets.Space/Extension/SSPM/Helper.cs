@@ -43,7 +43,7 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
             int difficulty,
             string audioFilename,
             string bgFilename,
-            List<(int time, float x, float y)> notes
+            List<(int time, float x, float y, bool isBreak, int endTime)> notes
         )
         {
             StringBuilder sb = new StringBuilder();
@@ -73,7 +73,12 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
             sb.AppendLine($"BeatmapSetID:-1");
             sb.AppendLine();
             sb.AppendLine("[Events]");
-            sb.AppendLine("//Background and Video events");
+            foreach (var note in notes)
+            {
+                if (!note.isBreak)
+                    continue;
+                sb.AppendLine($"2,{note.time},{note.endTime}");
+            }
             if (!string.IsNullOrEmpty(bgFilename))
             {
                 sb.AppendLine($"0,0,\"{bgFilename}\",0,0");
@@ -86,6 +91,8 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
 
             foreach (var note in notes)
             {
+                if (note.isBreak)
+                    continue;
                 float ox = note.x * 1e4f;
                 float oy = note.y * 1e4f;
 
@@ -104,7 +111,7 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
             int difficulty,
             byte[] musicData,
             byte[] coverData,
-            List<(int time, float x, float y)> notes
+            List<(int time, float x, float y, bool isBreak, int endTime)> notes
         )
         {
             string filename = $"{id} {name}".ReplaceAny(Path.GetInvalidFileNameChars(), '_');
