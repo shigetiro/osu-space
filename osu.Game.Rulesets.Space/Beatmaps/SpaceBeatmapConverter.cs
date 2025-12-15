@@ -48,7 +48,6 @@ namespace osu.Game.Rulesets.Space.Beatmaps
             if (beatmap.BeatmapInfo.Ruleset.ShortName != "osuspaceruleset")
             {
                 int streak = 0;
-                const float epsilon = 0.2f;
                 if (index > 0)
                 {
                     double lastTime = original.StartTime;
@@ -56,7 +55,8 @@ namespace osu.Game.Rulesets.Space.Beatmaps
                     {
                         var prevObj = beatmap.HitObjects[i];
                         var prevPos = getGridPosition(prevObj);
-                        if (Math.Abs(prevPos.col - col) > epsilon || Math.Abs(prevPos.row - row) > epsilon)
+
+                        if (prevPos.col != col || prevPos.row != row)
                             break;
 
                         if (lastTime - prevObj.StartTime > 1000)
@@ -69,13 +69,15 @@ namespace osu.Game.Rulesets.Space.Beatmaps
 
                 if (streak > 0)
                 {
-                    var ringPath = new List<(float c, float r)>
+                    var ringPath = new List<(int c, int r)>
                     {
-                        (0f, 2f), (1f, 2f), (2f, 2f), (2f, 1f),
-                        (2f, 0f), (1f, 0f), (0f, 0f), (0f, 1f)
+                        (0, 2), (1, 2), (2, 2),
+                        (2, 1),
+                        (2, 0), (1, 0), (0, 0),
+                        (0, 1)
                     };
 
-                    int startIndex = closestIndex(ringPath, col, row, epsilon);
+                    int startIndex = ringPath.IndexOf(((int)col, (int)row));
 
                     if (startIndex != -1)
                     {
@@ -104,16 +106,6 @@ namespace osu.Game.Rulesets.Space.Beatmaps
             };
         }
 
-        private static int closestIndex(List<(float c, float r)> path, float col, float row, float epsilon)
-        {
-            for (int i = 0; i < path.Count; i++)
-            {
-                if (Math.Abs(path[i].c - col) < epsilon && Math.Abs(path[i].r - row) < epsilon)
-                    return i;
-            }
-            return -1;
-        }
-
         private static (float col, float row) getGridPosition(HitObject hitObject, bool isOSpaceBeatmap = false)
         {
             if (isOSpaceBeatmap)
@@ -123,8 +115,8 @@ namespace osu.Game.Rulesets.Space.Beatmaps
             float x = ((IHasXPosition)hitObject).X;
             float y = ((IHasYPosition)hitObject).Y;
             return (
-                Math.Clamp(x / (SpacePlayfield.BASE_SIZE / 3f), 0, 2),
-                Math.Clamp(y / (SpacePlayfield.BASE_SIZE / 3f), 0, 2)
+                (int)Math.Clamp(x / (SpacePlayfield.BASE_SIZE / 3f), 0, 2),
+                (int)Math.Clamp(y / (SpacePlayfield.BASE_SIZE / 3f), 0, 2)
                 );
         }
     }
