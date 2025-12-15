@@ -91,8 +91,8 @@ namespace osu.Game.Rulesets.Space
 
             header.AddText("osu!space by ");
             header.AddLink("michioxd", () => userProfile?.ShowUser(new APIUser { Id = 16149043 }), "View profile");
-            header.AddText(" ฅ^>//<^ฅ v");
-            header.AddLink(SpaceRuleset.VERSION_STRING, "https://github.com/michioxd/osu-space/releases/tag/" + SpaceRuleset.VERSION_STRING);
+            header.AddText(" ฅ^>//<^ฅ ");
+            header.AddLink("v" + SpaceRuleset.VERSION_STRING, "https://github.com/michioxd/osu-space/releases/tag/" + SpaceRuleset.VERSION_STRING);
 
             Children = new Drawable[]
             {
