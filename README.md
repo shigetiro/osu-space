@@ -4,8 +4,6 @@ Custom game mode for [osu!(lazer)](https://github.com/ppy/osu) based on [Sound S
 
 Currently still **highly under development**. Some features have been implemented, but there are still tons of bugs. Please open an issue if you encounter any.
 
-Status: **THE CONVERTER NEEDS TO BE REFACTORED!** I forgot about quantum notes (float), so basically every note is shifted toward the center of each grid cell. Previously, I simply thought that notes would be fixed to each grid cell, but after implementing the sspm converter, I realized that wasn’t the case.
-
 | Main gameplay | Customization |
 |---|---|
 | ![](https://github.com/user-attachments/assets/22e24ad0-c870-432e-883a-8e2e844c6bc1) ![](https://github.com/user-attachments/assets/12fe79b0-092a-4e37-ab2b-d55c3907c79b) | ![](https://github.com/user-attachments/assets/b299dc9a-a071-4a38-b20d-b1b696a508f3) |
@@ -48,7 +46,7 @@ Visit the [Releases](https://github.com/michioxd/osu-space/releases) page to dow
 - [x] Basic gameplay
 - [x] SSPM v1/2 converter/importer
 - [ ] Note speed change event
-- [ ] Quantum note **(need refactor)**
+- [x] Quantum note **(need refactor)**
 - [ ] **(NP)** Editor
 
 NP: Not planned
