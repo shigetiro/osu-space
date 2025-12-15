@@ -186,8 +186,7 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
             }
 
             reader.BaseStream.Seek(markerOffset, SeekOrigin.Begin);
-            var notes = new List<(int time, float x, float y, bool isBreak, int endTime)>();
-            int lastTime = 0;
+            var notes = new List<(int time, float x, float y)>();
 
             for (int i = 0; i < markerCount; i++)
             {
@@ -252,12 +251,7 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
 
                 if (def.id == "ssp_note" && noteX.HasValue && noteY.HasValue)
                 {
-                    notes.Add((time, noteX.Value, noteY.Value, false, 0));
-                    if (time - lastTime > 6000)
-                    {
-                        notes.Add((lastTime + 2000, 0, 0, true, time - 2000));
-                    }
-                    lastTime = time;
+                    notes.Add((time, noteX.Value, noteY.Value));
                 }
             }
 
@@ -314,8 +308,7 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
                 musicData = reader.ReadBytes((int)len);
             }
 
-            var notes = new List<(int time, float x, float y, bool isBreak, int endTime)>();
-            int lastTime = 0;
+            var notes = new List<(int time, float x, float y)>();
             for (int i = 0; i < noteCount; i++)
             {
                 int time = reader.ReadInt32();
@@ -331,12 +324,7 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
                     x = reader.ReadByte();
                     y = reader.ReadByte();
                 }
-                notes.Add((time, x, y, false, 0));
-                if (time - lastTime > 6000)
-                {
-                    notes.Add((lastTime + 2000, 0, 0, true, time - 2000));
-                }
-                lastTime = time;
+                notes.Add((time, x, y));
             }
 
             return SSPMHelper.CreateOSZ(originalPath, id, name, artist, creator, difficulty, musicData, coverData, notes);

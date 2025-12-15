@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Text;
 
 namespace osu.Game.Rulesets.Space.Extension.SSPM
@@ -43,7 +44,7 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
             int difficulty,
             string audioFilename,
             string bgFilename,
-            List<(int time, float x, float y, bool isBreak, int endTime)> notes
+            List<(int time, float x, float y)> notes
         )
         {
             StringBuilder sb = new StringBuilder();
@@ -73,11 +74,15 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
             sb.AppendLine($"BeatmapSetID:-1");
             sb.AppendLine();
             sb.AppendLine("[Events]");
-            foreach (var note in notes)
+            int lastTime = 0, noteIndex = 0;
+            foreach (var note in notes.OrderBy(n => n.time))
             {
-                if (!note.isBreak)
-                    continue;
-                sb.AppendLine($"2,{note.time},{note.endTime}");
+                noteIndex++;
+                if (lastTime > 0 && note.time - lastTime > 6000 && noteIndex < notes.Count)
+                {
+                    sb.AppendLine($"2,{lastTime + 500},{note.time - 500}");
+                }
+                lastTime = note.time;
             }
             if (!string.IsNullOrEmpty(bgFilename))
             {
@@ -91,8 +96,6 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
 
             foreach (var note in notes)
             {
-                if (note.isBreak)
-                    continue;
                 float ox = note.x * 1e4f;
                 float oy = note.y * 1e4f;
 
@@ -111,7 +114,7 @@ namespace osu.Game.Rulesets.Space.Extension.SSPM
             int difficulty,
             byte[] musicData,
             byte[] coverData,
-            List<(int time, float x, float y, bool isBreak, int endTime)> notes
+            List<(int time, float x, float y)> notes
         )
         {
             string filename = $"{id} {name}".ReplaceAny(Path.GetInvalidFileNameChars(), '_');
