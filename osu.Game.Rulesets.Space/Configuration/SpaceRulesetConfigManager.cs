@@ -3,7 +3,6 @@
 
 #nullable enable
 
-using osu.Framework.Bindables;
 using osu.Game.Configuration;
 using osu.Game.Rulesets.Configuration;
 using osu.Game.Rulesets.UI;
