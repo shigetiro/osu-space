@@ -14,7 +14,6 @@ namespace osu.Game.Rulesets.Space.Mods
 {
     public class SpaceModNoScope : ModNoScope, IUpdatableByPlayfield
     {
-        // to do
         public override LocalisableString Description => "Where's the cursor?";
 
         public override BindableInt HiddenComboCount { get; } = new BindableInt(10)
