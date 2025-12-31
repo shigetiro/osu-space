@@ -89,7 +89,6 @@ namespace osu.Game.Rulesets.Space
                     [
                         new MultiMod(new SpaceModPerfect()),
                         new MultiMod(new SpaceModDoubleTime(), new SpaceModNightcore()),
-                        new SpaceModFlashlight(),
                         new ModAccuracyChallenge(),
                     ];
 
