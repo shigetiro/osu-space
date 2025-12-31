@@ -89,6 +89,8 @@ namespace osu.Game.Rulesets.Space
                     [
                         new MultiMod(new SpaceModPerfect()),
                         new MultiMod(new SpaceModDoubleTime(), new SpaceModNightcore()),
+                        new SpaceModFlashlight(),
+                        new ModAccuracyChallenge(),
                     ];
 
                 // case ModType.Conversion:
@@ -109,6 +111,7 @@ namespace osu.Game.Rulesets.Space
                         new MultiMod(new ModWindUp(), new ModWindDown()),
                         new SpaceModMuted(),
                         new ModAdaptiveSpeed(),
+                        new SpaceModNoScope(),
                     ];
                 // case ModType.System:
                 //     return new Mod[]
