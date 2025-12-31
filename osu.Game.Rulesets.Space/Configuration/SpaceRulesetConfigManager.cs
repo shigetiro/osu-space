@@ -17,8 +17,6 @@ namespace osu.Game.Rulesets.Space.Configuration
         {
         }
 
-        public static BindableFloat? FieldSize;
-
         protected override void InitialiseDefaults()
         {
             base.InitialiseDefaults();
@@ -35,13 +33,12 @@ namespace osu.Game.Rulesets.Space.Configuration
             SetDefault(SpaceRulesetSetting.NoteCornerRadius, 8f, 0.5f, 9f, 0.1f);
             SetDefault(SpaceRulesetSetting.Palette, SpacePalette.White);
             SetDefault(SpaceRulesetSetting.Parallax, 2f, 0.0f, 20f, 0.1f);
-            FieldSize = SetDefault(SpaceRulesetSetting.ScalePlayfield, 0.6f, 0.2f, 0.95f, 0.05f);
+            SetDefault(SpaceRulesetSetting.ScalePlayfield, 0.6f, 0.2f, 0.95f, 0.05f);
             SetDefault(SpaceRulesetSetting.GameplayCursorSize, 1.0f, 0.1f, 6f, 0.01f);
             SetDefault(SpaceRulesetSetting.ShowCursorTrail, true);
             SetDefault(SpaceRulesetSetting.Bloom, false);
             SetDefault(SpaceRulesetSetting.BloomStrength, 1.0f, 0.1f, 10f, 0.01f);
             SetDefault(SpaceRulesetSetting.HitWindow, 25f, 0f, 120f, 1f);
-
         }
     }
 
