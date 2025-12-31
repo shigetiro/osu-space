@@ -10,13 +10,14 @@ using osu.Framework.Input.Events;
 using osu.Framework.Utils;
 using osu.Game.Configuration;
 using osu.Game.Rulesets.Mods;
+using osu.Game.Rulesets.Space.Configuration;
 using osu.Game.Rulesets.Space.Objects;
 
 namespace osu.Game.Rulesets.Space.Mods;
 
 public partial class SpaceModFlashlight : ModFlashlight<SpaceHitObject>
 {
-    public override double ScoreMultiplier => 1.12;
+    public override double ScoreMultiplier => UsesDefaultConfiguration ? 1.12 : 1;
 
     private const double default_follow_delay = 120;
 
@@ -28,7 +29,7 @@ public partial class SpaceModFlashlight : ModFlashlight<SpaceHitObject>
         Precision = default_follow_delay,
     };
 
-    public override BindableFloat SizeMultiplier { get; } = new BindableFloat(0.8f)
+    public override BindableFloat SizeMultiplier { get; } = new BindableFloat(1)
     {
         MinValue = 0.5f,
         MaxValue = 2f,
@@ -69,7 +70,8 @@ public partial class SpaceModFlashlight : ModFlashlight<SpaceHitObject>
 
         protected override void UpdateFlashlightSize(float size)
         {
-            this.TransformTo(nameof(FlashlightSize), new Vector2(0, size), FLASHLIGHT_FADE_DURATION);
+            float fieldSize = SpaceRulesetConfigManager.FieldSize.Value;
+            this.TransformTo(nameof(FlashlightSize), new Vector2(0, size * fieldSize), FLASHLIGHT_FADE_DURATION);
         }
 
         protected override string FragmentShader => "CircularFlashlight";
